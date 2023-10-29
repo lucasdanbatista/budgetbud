@@ -1,1 +1,13 @@
 include: package:flutter_lints/flutter.yaml
+
+analyzer:
+  exclude:
+    - lib/**/*.g.dart
+    - lib/**/*.gr.dart
+
+linter:
+  rules:
+    - prefer_single_quotes
+    - prefer_relative_imports
+    - require_trailing_commas
+    - use_rethrow_when_possible
