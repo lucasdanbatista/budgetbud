@@ -5,8 +5,17 @@ import '../../../utils/formatters/currency_formatter.dart';
 
 class CategoryListTile extends StatelessWidget {
   final Category category;
+  final double utilizedPercentage;
+  final double utilizedValue;
+  final VoidCallback onTap;
 
-  const CategoryListTile(this.category, {super.key});
+  const CategoryListTile(
+    this.category, {
+    super.key,
+    required this.utilizedPercentage,
+    required this.utilizedValue,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -20,14 +29,15 @@ class CategoryListTile extends StatelessWidget {
         ),
       ),
       trailing: Text(
-        '${CurrencyFormatter().format(category.used)} de\n'
+        '${CurrencyFormatter().format(utilizedValue)} de\n'
         '${CurrencyFormatter().format(category.budgetLimit)}',
         textAlign: TextAlign.end,
       ),
       title: Text(category.title),
       subtitle: LinearProgressIndicator(
-        value: category.used / category.budgetLimit,
+        value: utilizedPercentage,
       ),
+      onTap: onTap,
     );
   }
 }

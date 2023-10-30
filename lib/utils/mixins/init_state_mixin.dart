@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
 
 mixin InitStateMixin on StatelessWidget {
-  void initState();
+  Future<void> initState();
 
   @mustCallSuper
   @override

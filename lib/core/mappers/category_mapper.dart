@@ -13,6 +13,7 @@ class CategoryMapper implements EntityMapper<CategoryDTO, Category> {
   @override
   Category toEntity(CategoryDTO it) {
     return Category(
+      id: it.id,
       title: it.title,
       budgetLimit: it.budgetLimit,
       icon: _iconMapper.map(it.iconName),
