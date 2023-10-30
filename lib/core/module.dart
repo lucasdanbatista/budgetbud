@@ -1,9 +1,9 @@
 abstract class Module {
-  void init();
+  Future<void> init();
 
-  static void initAll(List<Module> modules) {
+  static Future<void> initAll(List<Module> modules) async {
     for (final module in modules) {
-      module.init();
+      await module.init();
     }
   }
 }

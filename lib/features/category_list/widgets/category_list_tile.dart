@@ -21,12 +21,12 @@ class CategoryListTile extends StatelessWidget {
       ),
       trailing: Text(
         '${CurrencyFormatter().format(category.used)} de\n'
-        '${CurrencyFormatter().format(category.budget)}',
+        '${CurrencyFormatter().format(category.budgetLimit)}',
         textAlign: TextAlign.end,
       ),
       title: Text(category.title),
       subtitle: LinearProgressIndicator(
-        value: category.used / category.budget,
+        value: category.used / category.budgetLimit,
       ),
     );
   }

@@ -1,21 +1,32 @@
-import 'package:faker/faker.dart';
-import 'package:flutter/foundation.dart';
+import 'package:sqflite/sqflite.dart';
 
 import '../dtos/category_dto.dart';
 
 abstract interface class CategoryDatasource {
-  factory CategoryDatasource.mock() = _MockedCategoryDatasource;
+  factory CategoryDatasource.local(Database database) =
+      _LocalCategoryDatasource;
 
-  Future<List<CategoryDTO>> findAll();
+  Future<void> create(CategoryDTO category);
+
+  Future<List<CategoryDTO>> findAll(String budgetId);
 }
 
-class _MockedCategoryDatasource implements CategoryDatasource {
-  _MockedCategoryDatasource() : assert(!kReleaseMode);
-  final _categories = List.generate(
-    random.integer(10),
-    (_) => CategoryDTO.mock(),
-  );
+class _LocalCategoryDatasource implements CategoryDatasource {
+  final Database _database;
+
+  _LocalCategoryDatasource(this._database);
 
   @override
-  Future<List<CategoryDTO>> findAll() async => _categories;
+  Future<void> create(CategoryDTO category) =>
+      _database.insert('Category', category.toJson());
+
+  @override
+  Future<List<CategoryDTO>> findAll(String budgetId) async {
+    final data = await _database.query(
+      'Category',
+      where: 'budgetId = ?',
+      whereArgs: [budgetId],
+    );
+    return data.map(CategoryDTO.fromJson).toList();
+  }
 }
