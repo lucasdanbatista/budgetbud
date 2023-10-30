@@ -13,4 +13,7 @@ class CategoryRepository {
     final data = await _datasource.findAll(budget.id);
     return data.map(_mapper.toEntity).toList();
   }
+
+  Future<void> updateLimit(Category category, double newLimit) =>
+      _datasource.updateLimit(category.id, newLimit);
 }

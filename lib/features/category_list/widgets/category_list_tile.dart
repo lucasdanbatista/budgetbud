@@ -8,6 +8,7 @@ class CategoryListTile extends StatelessWidget {
   final double utilizedPercentage;
   final double utilizedValue;
   final VoidCallback onTap;
+  final ValueChanged<double> onLimitChanged;
 
   const CategoryListTile(
     this.category, {
@@ -15,6 +16,7 @@ class CategoryListTile extends StatelessWidget {
     required this.utilizedPercentage,
     required this.utilizedValue,
     required this.onTap,
+    required this.onLimitChanged,
   });
 
   @override
@@ -28,14 +30,61 @@ class CategoryListTile extends StatelessWidget {
           size: 20,
         ),
       ),
-      trailing: Text(
-        '${CurrencyFormatter().format(utilizedValue)} de\n'
-        '${CurrencyFormatter().format(category.budgetLimit)}',
-        textAlign: TextAlign.end,
+      trailing: PopupMenuButton(
+        itemBuilder: (BuildContext context) => [
+          PopupMenuItem(
+            child: const Text('Editar'),
+            onTap: () async {
+              final limitController = TextEditingController();
+              final limit = await showDialog<double>(
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: Text(category.title),
+                  content: TextFormField(
+                    controller: limitController,
+                    keyboardType: TextInputType.number,
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: 'Limite',
+                    ),
+                  ),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: const Text('CANCELAR'),
+                    ),
+                    TextButton(
+                      onPressed: () => Navigator.pop(
+                        context,
+                        double.parse(limitController.text.trim()),
+                      ),
+                      child: const Text('SALVAR'),
+                    ),
+                  ],
+                ),
+              );
+              if (limit != null) {
+                onLimitChanged(limit);
+              }
+            },
+          ),
+        ],
       ),
       title: Text(category.title),
-      subtitle: LinearProgressIndicator(
-        value: utilizedPercentage,
+      subtitle: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Padding(padding: EdgeInsets.only(top: 4)),
+          LinearProgressIndicator(
+            value: utilizedPercentage,
+          ),
+          const Padding(padding: EdgeInsets.only(top: 8)),
+          Text(
+            '${CurrencyFormatter().format(utilizedValue)} de '
+            '${CurrencyFormatter().format(category.budgetLimit)}',
+            style: Theme.of(context).textTheme.labelSmall,
+          ),
+        ],
       ),
       onTap: onTap,
     );

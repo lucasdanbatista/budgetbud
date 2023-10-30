@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 
+import '../../core/entities/budget.dart';
 import '../../utils/mixins/init_state_mixin.dart';
 import '../app/app_router.gr.dart';
 import 'budget_list_controller.dart';
+import 'widgets/budget_bottom_sheet.dart';
 
 @RoutePage()
 class BudgetListPage extends StatelessWidget with InitStateMixin {
@@ -15,7 +17,6 @@ class BudgetListPage extends StatelessWidget with InitStateMixin {
 
   @override
   Future<void> initState() async {
-    await controller.init();
     await controller.fetch();
   }
 
@@ -29,15 +30,37 @@ class BudgetListPage extends StatelessWidget with InitStateMixin {
       body: Observer(
         builder: (context) => ListView.builder(
           itemCount: controller.budgets.length,
-          itemBuilder: (context, index) => ListTile(
-            title: Text(controller.budgets[index].title),
-            onTap: () => context.pushRoute(
-              CategoryListRoute(
-                controller: GetIt.I(),
-              ),
-            ),
-          ),
+          itemBuilder: (context, index) {
+            final budget = controller.budgets[index];
+            return ListTile(
+              title: Text(budget.title),
+              onTap: () async {
+                await context.pushRoute(
+                  CategoryListRoute(
+                    budget: budget,
+                    controller: GetIt.I(),
+                  ),
+                );
+                controller.fetch();
+              },
+            );
+          },
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          final budget = await showModalBottomSheet<Budget>(
+            context: context,
+            builder: (context) => const BudgetBottomSheet(
+              appBarTitle: 'Novo orçamento',
+            ),
+          );
+          if (budget != null) {
+            await controller.create(budget);
+            controller.fetch();
+          }
+        },
+        child: const Icon(Icons.add),
       ),
     );
   }

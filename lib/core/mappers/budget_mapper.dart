@@ -8,6 +8,8 @@ class BudgetMapper implements EntityMapper<BudgetDTO, Budget> {
     return Budget(
       id: it.id,
       title: it.title,
+      startAt: it.startAt,
+      endAt: it.endAt,
     );
   }
 }

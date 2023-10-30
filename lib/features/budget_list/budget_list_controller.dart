@@ -20,5 +20,5 @@ abstract class BudgetListControllerBase with Store {
   Future<void> fetch() async =>
       budgets = ObservableList.of(await _repository.findAll());
 
-  Future<void> init() => _repository.init();
+  Future<void> create(Budget budget) => _repository.create(budget);
 }

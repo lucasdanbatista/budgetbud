@@ -1,8 +1,8 @@
 import 'package:mobx/mobx.dart';
 
+import '../../core/entities/budget.dart';
 import '../../core/entities/category.dart';
 import '../../core/entities/expense.dart';
-import '../../core/repositories/budget_repository.dart';
 import '../../core/repositories/category_repository.dart';
 import '../../core/repositories/expense_repository.dart';
 
@@ -12,13 +12,13 @@ class CategoryListController = CategoryListControllerBase
     with _$CategoryListController;
 
 abstract class CategoryListControllerBase with Store {
-  final BudgetRepository _budgetRepository;
   final CategoryRepository _categoryRepository;
   final ExpenseRepository _expenseRepository;
-  final List<Expense> _expenses = [];
+
+  @observable
+  ObservableList<Expense> expenses = ObservableList();
 
   CategoryListControllerBase(
-    this._budgetRepository,
     this._categoryRepository,
     this._expenseRepository,
   );
@@ -27,21 +27,23 @@ abstract class CategoryListControllerBase with Store {
   ObservableList<Category> categories = ObservableList();
 
   @action
-  Future<void> fetch() async {
-    _expenses.clear();
-    final budgets = await _budgetRepository.findAll();
+  Future<void> fetch(Budget budget) async {
+    expenses.clear();
     categories = ObservableList.of(
-      await _categoryRepository.findAll(budgets.first),
+      await _categoryRepository.findAll(budget),
     );
     for (final category in categories) {
-      _expenses.addAll(
+      expenses.addAll(
         await _expenseRepository.findAll(category),
       );
     }
   }
 
+  Future<void> updateLimit(Category category, double newLimit) =>
+      _categoryRepository.updateLimit(category, newLimit);
+
   double utilizeValueOf(Category category) {
-    final expenses = _expenses.where((e) => e.category.id == category.id);
+    final expenses = this.expenses.where((e) => e.category.id == category.id);
     var sum = 0.0;
     for (final expense in expenses) {
       sum += expense.value;
@@ -49,6 +51,26 @@ abstract class CategoryListControllerBase with Store {
     return sum;
   }
 
-  double utilizedPercentageOf(Category category) =>
-      utilizeValueOf(category) / category.budgetLimit;
+  double utilizedPercentageOf(Category category) {
+    if (category.budgetLimit == 0) return 0;
+    return utilizeValueOf(category) / category.budgetLimit;
+  }
+
+  @computed
+  double get totalUtilized {
+    var sum = 0.0;
+    for (final expense in expenses) {
+      sum += expense.value;
+    }
+    return sum;
+  }
+
+  @computed
+  double get totalBudgetLimit {
+    var sum = 0.0;
+    for (final category in categories) {
+      sum += category.budgetLimit;
+    }
+    return sum;
+  }
 }
