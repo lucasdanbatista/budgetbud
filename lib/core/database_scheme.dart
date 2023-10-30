@@ -37,6 +37,7 @@ class _DatabaseSchemeV1 implements DatabaseScheme {
           create table Expense(
             id char(36) primary key,
             categoryId char(36) references Category(id) not null,
+            title varchar(100) not null,
             value real not null,
             madeAt varchar(50) not null
           );

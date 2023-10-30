@@ -4,18 +4,22 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../utils/mixins/init_state_mixin.dart';
+import '../app/app_router.gr.dart';
 import 'category_list_controller.dart';
 import 'widgets/category_list_tile.dart';
 
 @RoutePage()
 class CategoryListPage extends StatelessWidget with InitStateMixin {
-  final controller = GetIt.I<CategoryListController>();
+  final CategoryListController controller;
 
-  CategoryListPage({super.key});
+  const CategoryListPage({
+    super.key,
+    required this.controller,
+  });
 
   @override
-  void initState() {
-    controller.fetch();
+  Future<void> initState() async {
+    await controller.fetch();
   }
 
   @override
@@ -28,9 +32,24 @@ class CategoryListPage extends StatelessWidget with InitStateMixin {
       body: Observer(
         builder: (context) => ListView.builder(
           itemCount: controller.categories.length,
-          itemBuilder: (context, index) => CategoryListTile(
-            controller.categories[index],
-          ),
+          itemBuilder: (context, index) {
+            final category = controller.categories[index];
+            return CategoryListTile(
+              category,
+              utilizedValue: controller.utilizeValueOf(category),
+              utilizedPercentage: controller.utilizedPercentageOf(category),
+              onTap: () async {
+                await context.pushRoute(
+                  ExpenseListRoute(
+                    controller: GetIt.I(
+                      param1: category,
+                    ),
+                  ),
+                );
+                controller.fetch();
+              },
+            );
+          },
         ),
       ),
     );

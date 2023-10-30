@@ -7,6 +7,7 @@ class BudgetMapper implements EntityMapper<BudgetDTO, Budget> {
   Budget toEntity(BudgetDTO it) {
     return Budget(
       id: it.id,
+      title: it.title,
     );
   }
 }
