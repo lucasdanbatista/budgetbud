@@ -7,7 +7,7 @@ class CategoryListModule extends Module {
   @override
   Future<void> init() async {
     GetIt.I.registerFactory(
-      () => CategoryListController(GetIt.I(), GetIt.I(), GetIt.I()),
+      () => CategoryListController(GetIt.I(), GetIt.I()),
     );
   }
 }

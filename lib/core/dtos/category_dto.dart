@@ -8,10 +8,10 @@ part 'category_dto.g.dart';
 class CategoryDTO extends DTO {
   final String id;
   final String budgetId;
-  final String title;
-  final double budgetLimit;
-  final String iconName;
-  final String backgroundColor;
+  String title;
+  double budgetLimit;
+  String iconName;
+  String backgroundColor;
 
   CategoryDTO({
     required this.id,

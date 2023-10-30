@@ -9,13 +9,14 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:auto_route/auto_route.dart' as _i4;
+import 'package:budgetbud/core/entities/budget.dart' as _i6;
 import 'package:budgetbud/features/budget_list/budget_list_page.dart' as _i1;
 import 'package:budgetbud/features/category_list/category_list_controller.dart'
-    as _i6;
+    as _i7;
 import 'package:budgetbud/features/category_list/category_list_page.dart'
     as _i2;
 import 'package:budgetbud/features/expense_list/expense_list_controller.dart'
-    as _i7;
+    as _i8;
 import 'package:budgetbud/features/expense_list/expense_list_page.dart' as _i3;
 import 'package:flutter/material.dart' as _i5;
 
@@ -38,6 +39,7 @@ abstract class $AppRouter extends _i4.RootStackRouter {
         routeData: routeData,
         child: _i2.CategoryListPage(
           key: args.key,
+          budget: args.budget,
           controller: args.controller,
         ),
       );
@@ -89,12 +91,14 @@ class BudgetListRouteArgs {
 class CategoryListRoute extends _i4.PageRouteInfo<CategoryListRouteArgs> {
   CategoryListRoute({
     _i5.Key? key,
-    required _i6.CategoryListController controller,
+    required _i6.Budget budget,
+    required _i7.CategoryListController controller,
     List<_i4.PageRouteInfo>? children,
   }) : super(
           CategoryListRoute.name,
           args: CategoryListRouteArgs(
             key: key,
+            budget: budget,
             controller: controller,
           ),
           initialChildren: children,
@@ -109,16 +113,19 @@ class CategoryListRoute extends _i4.PageRouteInfo<CategoryListRouteArgs> {
 class CategoryListRouteArgs {
   const CategoryListRouteArgs({
     this.key,
+    required this.budget,
     required this.controller,
   });
 
   final _i5.Key? key;
 
-  final _i6.CategoryListController controller;
+  final _i6.Budget budget;
+
+  final _i7.CategoryListController controller;
 
   @override
   String toString() {
-    return 'CategoryListRouteArgs{key: $key, controller: $controller}';
+    return 'CategoryListRouteArgs{key: $key, budget: $budget, controller: $controller}';
   }
 }
 
@@ -127,7 +134,7 @@ class CategoryListRouteArgs {
 class ExpenseListRoute extends _i4.PageRouteInfo<ExpenseListRouteArgs> {
   ExpenseListRoute({
     _i5.Key? key,
-    required _i7.ExpenseListController controller,
+    required _i8.ExpenseListController controller,
     List<_i4.PageRouteInfo>? children,
   }) : super(
           ExpenseListRoute.name,
@@ -152,7 +159,7 @@ class ExpenseListRouteArgs {
 
   final _i5.Key? key;
 
-  final _i7.ExpenseListController controller;
+  final _i8.ExpenseListController controller;
 
   @override
   String toString() {
