@@ -5,7 +5,7 @@ import 'app_router.dart';
 
 class AppModule extends Module {
   @override
-  void init() {
+  Future<void> init() async {
     GetIt.I.registerLazySingleton(() => AppRouter());
   }
 }

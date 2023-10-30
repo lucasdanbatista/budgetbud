@@ -17,6 +17,7 @@ dependencies:
   json_annotation: ^4.8.1
   mobx: ^2.2.1
   sqflite: ^2.3.0
+  uuid: ^4.1.0
 
 dev_dependencies:
   flutter_test:

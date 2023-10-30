@@ -1,5 +1,3 @@
-import 'package:faker/faker.dart';
-import 'package:flutter/foundation.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 import 'dto.dart';
@@ -8,21 +6,24 @@ part 'category_dto.g.dart';
 
 @JsonSerializable()
 class CategoryDTO extends DTO {
-  String? title;
+  final String id;
+  final String budgetId;
+  final String title;
+  final double budgetLimit;
+  final String iconName;
+  final String backgroundColor;
 
   CategoryDTO({
-    this.title,
+    required this.id,
+    required this.budgetId,
+    required this.title,
+    required this.budgetLimit,
+    required this.iconName,
+    required this.backgroundColor,
   });
 
   factory CategoryDTO.fromJson(Map<String, dynamic> json) =>
       _$CategoryDTOFromJson(json);
-
-  factory CategoryDTO.mock() {
-    assert(!kReleaseMode);
-    return CategoryDTO(
-      title: faker.lorem.words(random.integer(3, min: 1)).join(' '),
-    );
-  }
 
   Map<String, dynamic> toJson() => _$CategoryDTOToJson(this);
 }

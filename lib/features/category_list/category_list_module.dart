@@ -5,7 +5,7 @@ import 'category_list_controller.dart';
 
 class CategoryListModule extends Module {
   @override
-  void init() {
-    GetIt.I.registerFactory(() => CategoryListController(GetIt.I()));
+  Future<void> init() async {
+    GetIt.I.registerFactory(() => CategoryListController(GetIt.I(), GetIt.I()));
   }
 }
