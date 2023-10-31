@@ -11,8 +11,11 @@ class CategoryRepository {
 
   Future<List<Category>> findAll(Budget budget) async {
     final data = await _datasource.findAll(budget.id);
-    return data.map(_mapper.toEntity).toList();
+    return data.map((e) => _mapper.toEntity(budget, e)).toList();
   }
+
+  Future<void> create(Category category) =>
+      _datasource.create(_mapper.toDTO(category));
 
   Future<void> updateLimit(Category category, double newLimit) =>
       _datasource.updateLimit(category.id, newLimit);

@@ -22,6 +22,7 @@ class CategoryListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      contentPadding: const EdgeInsets.fromLTRB(16, 8, 0, 8),
       leading: CircleAvatar(
         backgroundColor: category.backgroundColor,
         child: Icon(
@@ -36,6 +37,7 @@ class CategoryListTile extends StatelessWidget {
             child: const Text('Editar'),
             onTap: () async {
               final limitController = TextEditingController();
+              limitController.text = category.budgetLimit.toString();
               final limit = await showDialog<double>(
                 context: context,
                 builder: (context) => AlertDialog(
@@ -45,7 +47,8 @@ class CategoryListTile extends StatelessWidget {
                     keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(),
-                      hintText: 'Limite',
+                      hintText: '0.0',
+                      labelText: 'Limite',
                     ),
                   ),
                   actions: [

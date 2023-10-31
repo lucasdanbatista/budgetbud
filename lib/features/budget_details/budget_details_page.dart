@@ -4,18 +4,20 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../core/entities/budget.dart';
+import '../../core/entities/category.dart';
 import '../../utils/formatters/currency_formatter.dart';
 import '../../utils/mixins/init_state_mixin.dart';
 import '../app/app_router.gr.dart';
-import 'category_list_controller.dart';
+import 'budget_details_controller.dart';
+import 'widgets/category_bottom_sheet.dart';
 import 'widgets/category_list_tile.dart';
 
 @RoutePage()
-class CategoryListPage extends StatelessWidget with InitStateMixin {
+class BudgetDetailsPage extends StatelessWidget with InitStateMixin {
   final Budget budget;
-  final CategoryListController controller;
+  final BudgetDetailsController controller;
 
-  const CategoryListPage({
+  const BudgetDetailsPage({
     super.key,
     required this.budget,
     required this.controller,
@@ -64,6 +66,19 @@ class CategoryListPage extends StatelessWidget with InitStateMixin {
             );
           },
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          final category = await showModalBottomSheet<Category>(
+            context: context,
+            builder: (context) => const CategoryBottomSheet(),
+          );
+          if (category != null) {
+            await controller.createCategory(budget, category);
+          }
+          controller.fetch(budget);
+        },
+        child: const Icon(Icons.add),
       ),
       persistentFooterAlignment: AlignmentDirectional.center,
       persistentFooterButtons: [

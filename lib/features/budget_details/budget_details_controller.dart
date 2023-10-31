@@ -1,4 +1,5 @@
 import 'package:mobx/mobx.dart';
+import 'package:uuid/v4.dart';
 
 import '../../core/entities/budget.dart';
 import '../../core/entities/category.dart';
@@ -6,19 +7,19 @@ import '../../core/entities/expense.dart';
 import '../../core/repositories/category_repository.dart';
 import '../../core/repositories/expense_repository.dart';
 
-part 'category_list_controller.g.dart';
+part 'budget_details_controller.g.dart';
 
-class CategoryListController = CategoryListControllerBase
-    with _$CategoryListController;
+class BudgetDetailsController = BudgetDetailsControllerBase
+    with _$BudgetDetailsController;
 
-abstract class CategoryListControllerBase with Store {
+abstract class BudgetDetailsControllerBase with Store {
   final CategoryRepository _categoryRepository;
   final ExpenseRepository _expenseRepository;
 
   @observable
   ObservableList<Expense> expenses = ObservableList();
 
-  CategoryListControllerBase(
+  BudgetDetailsControllerBase(
     this._categoryRepository,
     this._expenseRepository,
   );
@@ -38,6 +39,18 @@ abstract class CategoryListControllerBase with Store {
       );
     }
   }
+
+  Future<void> createCategory(Budget budget, Category category) =>
+      _categoryRepository.create(
+        Category(
+          id: const UuidV4().generate(),
+          budget: budget,
+          title: category.title,
+          icon: category.icon,
+          backgroundColor: category.backgroundColor,
+          budgetLimit: 0,
+        ),
+      );
 
   Future<void> updateLimit(Category category, double newLimit) =>
       _categoryRepository.updateLimit(category, newLimit);
