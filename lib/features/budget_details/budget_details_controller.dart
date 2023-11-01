@@ -52,6 +52,9 @@ abstract class BudgetDetailsControllerBase with Store {
         ),
       );
 
+  Future<void> deleteCategory(Category category) =>
+      _categoryRepository.delete(category);
+
   Future<void> updateLimit(Category category, double newLimit) =>
       _categoryRepository.updateLimit(category, newLimit);
 

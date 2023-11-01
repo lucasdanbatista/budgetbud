@@ -52,6 +52,26 @@ class BudgetDetailsPage extends StatelessWidget with InitStateMixin {
                   await controller.updateLimit(category, limit);
                   controller.fetch(budget);
                 },
+                onLongPress: () => showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: const Text('Deletar categoria?'),
+                    actions: [
+                      TextButton(
+                        onPressed: () async {
+                          Navigator.pop(context);
+                          await controller.deleteCategory(category);
+                          controller.fetch(budget);
+                        },
+                        child: const Text('SIM'),
+                      ),
+                      TextButton(
+                        onPressed: () => Navigator.pop(context),
+                        child: const Text('NÃO'),
+                      ),
+                    ],
+                  ),
+                ),
                 onTap: () async {
                   await context.pushRoute(
                     ExpenseListRoute(

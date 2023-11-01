@@ -8,6 +8,7 @@ class CategoryListTile extends StatelessWidget {
   final double utilizedPercentage;
   final double utilizedValue;
   final VoidCallback onTap;
+  final VoidCallback onLongPress;
   final ValueChanged<double> onLimitChanged;
 
   const CategoryListTile(
@@ -16,6 +17,7 @@ class CategoryListTile extends StatelessWidget {
     required this.utilizedPercentage,
     required this.utilizedValue,
     required this.onTap,
+    required this.onLongPress,
     required this.onLimitChanged,
   });
 
@@ -90,6 +92,7 @@ class CategoryListTile extends StatelessWidget {
         ],
       ),
       onTap: onTap,
+      onLongPress: onLongPress,
     );
   }
 }

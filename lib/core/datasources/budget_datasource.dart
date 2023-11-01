@@ -7,6 +7,8 @@ abstract interface class BudgetDatasource {
 
   Future<void> create(BudgetDTO budget);
 
+  Future<void> deleteById(String id);
+
   Future<List<BudgetDTO>> findAll();
 }
 
@@ -18,6 +20,10 @@ class _LocalBudgetDatasource implements BudgetDatasource {
   @override
   Future<void> create(BudgetDTO budget) =>
       _database.insert('Budget', budget.toJson());
+
+  @override
+  Future<void> deleteById(String id) =>
+      _database.delete('Budget', where: 'id = ?', whereArgs: [id]);
 
   @override
   Future<List<BudgetDTO>> findAll() async {

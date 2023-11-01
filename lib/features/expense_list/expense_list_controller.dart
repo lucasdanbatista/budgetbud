@@ -10,20 +10,22 @@ class ExpenseListController = ExpenseListControllerBase
     with _$ExpenseListController;
 
 abstract class ExpenseListControllerBase with Store {
-  final Category _category;
+  final Category category;
   final ExpenseRepository _repository;
 
-  ExpenseListControllerBase(this._category, this._repository);
+  ExpenseListControllerBase(this.category, this._repository);
 
   @observable
   ObservableList<Expense> expenses = ObservableList();
 
   @action
   Future<void> fetch() async =>
-      expenses = ObservableList.of(await _repository.findAll(_category));
+      expenses = ObservableList.of(await _repository.findAll(category));
+
+  Future<void> delete(Expense expense) => _repository.delete(expense);
 
   Future<void> create(Expense expense) async {
-    await _repository.create(expense, _category);
+    await _repository.create(expense, category);
     await fetch();
   }
 }

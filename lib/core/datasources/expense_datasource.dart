@@ -7,6 +7,8 @@ abstract interface class ExpenseDatasource {
 
   Future<void> create(ExpenseDTO expense);
 
+  Future<void> deleteById(String id);
+
   Future<List<ExpenseDTO>> findAllByCategoryId(String id);
 }
 
@@ -18,6 +20,10 @@ class _LocalExpenseDatasource implements ExpenseDatasource {
   @override
   Future<void> create(ExpenseDTO expense) =>
       _database.insert('Expense', expense.toJson());
+
+  @override
+  Future<void> deleteById(String id) =>
+      _database.delete('Expense', where: 'id = ?', whereArgs: [id]);
 
   @override
   Future<List<ExpenseDTO>> findAllByCategoryId(String id) async {

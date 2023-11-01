@@ -26,4 +26,6 @@ class ExpenseRepository {
     final data = await _datasource.findAllByCategoryId(category.id);
     return data.map((e) => _mapper.toEntity(e, category)).toList();
   }
+
+  Future<void> delete(Expense expense) => _datasource.deleteById(expense.id);
 }

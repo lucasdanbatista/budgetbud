@@ -40,6 +40,26 @@ class ExpenseListPage extends StatelessWidget with InitStateMixin {
               leading: const Icon(Icons.attach_money_outlined),
               subtitle: Text(DateFormat.yMd().format(expense.madeAt)),
               trailing: Text(CurrencyFormatter().format(expense.value)),
+              onLongPress: () => showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: const Text('Deletar despesa?'),
+                  actions: [
+                    TextButton(
+                      onPressed: () async {
+                        Navigator.pop(context);
+                        await controller.delete(expense);
+                        controller.fetch();
+                      },
+                      child: const Text('SIM'),
+                    ),
+                    TextButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: const Text('NÃO'),
+                    ),
+                  ],
+                ),
+              ),
             );
           },
         ),
@@ -48,8 +68,8 @@ class ExpenseListPage extends StatelessWidget with InitStateMixin {
         onPressed: () async {
           final expense = await showModalBottomSheet<Expense>(
             context: context,
-            builder: (context) => const ExpenseBottomSheet(
-              appBarTitle: 'Nova despesa',
+            builder: (context) => ExpenseBottomSheet(
+              category: controller.category,
             ),
           );
           if (expense != null) {

@@ -26,7 +26,7 @@ class _DatabaseSchemeV1 implements DatabaseScheme {
         '''
           create table Category(
             id char(36) primary key,
-            budgetId char(36) references budget(id) not null,
+            budgetId char(36) references budget(id) on delete cascade on update cascade not null,
             title varchar(100) not null,
             iconName varchar(50) not null,
             backgroundColor varchar(50) not null,
@@ -36,7 +36,7 @@ class _DatabaseSchemeV1 implements DatabaseScheme {
         '''
           create table Expense(
             id char(36) primary key,
-            categoryId char(36) references Category(id) not null,
+            categoryId char(36) references Category(id) on delete cascade on update cascade not null,
             title varchar(100) not null,
             value real not null,
             madeAt varchar(50) not null

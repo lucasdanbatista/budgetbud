@@ -8,6 +8,8 @@ abstract interface class CategoryDatasource {
 
   Future<void> create(CategoryDTO category);
 
+  Future<void> deleteById(String id);
+
   Future<void> updateLimit(String categoryId, double newLimit);
 
   Future<CategoryDTO> findById(String id);
@@ -23,6 +25,10 @@ class _LocalCategoryDatasource implements CategoryDatasource {
   @override
   Future<void> create(CategoryDTO category) =>
       _database.insert('Category', category.toJson());
+
+  @override
+  Future<void> deleteById(String id) =>
+      _database.delete('Category', where: 'id = ?', whereArgs: [id]);
 
   @override
   Future<void> updateLimit(String categoryId, double newLimit) async {
