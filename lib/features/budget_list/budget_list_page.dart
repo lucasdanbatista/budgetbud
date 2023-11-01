@@ -34,6 +34,26 @@ class BudgetListPage extends StatelessWidget with InitStateMixin {
             final budget = controller.budgets[index];
             return ListTile(
               title: Text(budget.title),
+              onLongPress: () => showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: const Text('Deletar orçamento?'),
+                  actions: [
+                    TextButton(
+                      onPressed: () async {
+                        Navigator.pop(context);
+                        await controller.delete(budget);
+                        controller.fetch();
+                      },
+                      child: const Text('SIM'),
+                    ),
+                    TextButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: const Text('NÃO'),
+                    ),
+                  ],
+                ),
+              ),
               onTap: () async {
                 await context.pushRoute(
                   BudgetDetailsRoute(

@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../../../core/entities/category.dart';
 import '../../../core/entities/expense.dart';
 
 class ExpenseBottomSheet extends StatefulWidget {
-  final String appBarTitle;
+  final Category category;
 
   const ExpenseBottomSheet({
     super.key,
-    required this.appBarTitle,
+    required this.category,
   });
 
   @override
@@ -31,7 +32,7 @@ class _ExpenseBottomSheetState extends State<ExpenseBottomSheet> {
           onPressed: () => Navigator.of(context).pop(),
           icon: const Icon(Icons.close),
         ),
-        title: Text(widget.appBarTitle),
+        title: const Text('Nova despesa'),
         backgroundColor: Colors.transparent,
       ),
       body: ListView(
@@ -69,15 +70,16 @@ class _ExpenseBottomSheetState extends State<ExpenseBottomSheet> {
                     hintText: 'Data',
                   ),
                   onTap: () async {
+                    final now = DateTime.now();
                     final date = await showDatePicker(
                       context: context,
-                      initialDate: DateTime.now(),
-                      firstDate: DateTime.now().subtract(
-                        const Duration(days: 10 * 365),
-                      ),
-                      lastDate: DateTime.now().add(
-                        const Duration(days: 10 * 365),
-                      ),
+                      initialDate:
+                          now.isBefore(widget.category.budget.startAt) ||
+                                  now.isAfter(widget.category.budget.endAt)
+                              ? widget.category.budget.startAt
+                              : now,
+                      firstDate: widget.category.budget.startAt,
+                      lastDate: widget.category.budget.endAt,
                     );
                     if (date != null) {
                       expense.madeAt = date;
