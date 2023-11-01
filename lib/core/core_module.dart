@@ -9,7 +9,6 @@ import 'mappers/budget_mapper.dart';
 import 'mappers/category_mapper.dart';
 import 'mappers/color_mapper.dart';
 import 'mappers/expense_mapper.dart';
-import 'mappers/icon_mapper.dart';
 import 'module.dart';
 import 'repositories/budget_repository.dart';
 import 'repositories/category_repository.dart';
@@ -32,9 +31,8 @@ class CoreModule extends Module {
     GetIt.I.registerLazySingleton(() => database);
     GetIt.I.registerLazySingleton(() => BudgetMapper());
     GetIt.I.registerLazySingleton(() => ColorMapper());
-    GetIt.I.registerLazySingleton(() => IconMapper());
     GetIt.I.registerLazySingleton(() => ExpenseMapper());
-    GetIt.I.registerLazySingleton(() => CategoryMapper(GetIt.I(), GetIt.I()));
+    GetIt.I.registerLazySingleton(() => CategoryMapper(GetIt.I()));
     GetIt.I.registerLazySingleton(() => BudgetDatasource.local(GetIt.I()));
     GetIt.I.registerLazySingleton(() => CategoryDatasource.local(GetIt.I()));
     GetIt.I.registerLazySingleton(() => ExpenseDatasource.local(GetIt.I()));

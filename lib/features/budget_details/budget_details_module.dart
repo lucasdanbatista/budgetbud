@@ -1,13 +1,13 @@
 import 'package:get_it/get_it.dart';
 
 import '../../core/module.dart';
-import 'category_list_controller.dart';
+import 'budget_details_controller.dart';
 
-class CategoryListModule extends Module {
+class BudgetDetailsModule extends Module {
   @override
   Future<void> init() async {
     GetIt.I.registerFactory(
-      () => CategoryListController(GetIt.I(), GetIt.I()),
+      () => BudgetDetailsController(GetIt.I(), GetIt.I()),
     );
   }
 }
