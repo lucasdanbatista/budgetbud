@@ -16,6 +16,9 @@ class BudgetRepository {
     return data.map(_mapper.toEntity).toList();
   }
 
+  Future<void> update(Budget budget) =>
+      _datasource.update(_mapper.toDTO(budget));
+
   Future<void> create(Budget budget) => _datasource.create(
         BudgetDTO(
           id: const UuidV4().generate(),

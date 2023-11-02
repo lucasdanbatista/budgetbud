@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../../../core/entities/budget.dart';
+import '../../../utils/extensions/date_time.dart';
+import '../../../utils/extensions/int.dart';
 
 class BudgetBottomSheet extends StatefulWidget {
-  final String appBarTitle;
+  final Budget? budget;
 
   const BudgetBottomSheet({
     super.key,
-    required this.appBarTitle,
+    this.budget,
   });
 
   @override
@@ -19,8 +21,22 @@ class _BudgetBottomSheetState extends State<BudgetBottomSheet> {
   final titleController = TextEditingController();
   final startAtController = TextEditingController();
   final endAtController = TextEditingController();
-  final budget = Budget.lazy();
-  var canSave = false;
+  DateTime? startAt;
+  DateTime? endAt;
+  late bool canSave;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.budget != null) {
+      titleController.text = widget.budget!.title;
+      startAtController.text = DateFormat.yMd().format(widget.budget!.startAt);
+      endAtController.text = DateFormat.yMd().format(widget.budget!.endAt);
+      startAt = widget.budget!.startAt;
+      endAt = widget.budget!.endAt;
+    }
+    validate();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +47,7 @@ class _BudgetBottomSheetState extends State<BudgetBottomSheet> {
           icon: const Icon(Icons.close),
           onPressed: () => Navigator.pop(context),
         ),
-        title: Text(widget.appBarTitle),
+        title: Text('${widget.budget != null ? 'Novo' : 'Editar'} orçamento'),
         backgroundColor: Colors.transparent,
       ),
       body: SingleChildScrollView(
@@ -55,16 +71,19 @@ class _BudgetBottomSheetState extends State<BudgetBottomSheet> {
                   onTap: () async {
                     final date = await showDatePicker(
                       context: context,
-                      initialDate: DateTime.now(),
-                      firstDate: DateTime.now().subtract(
-                        const Duration(days: 365 * 10),
-                      ),
-                      lastDate:
-                          DateTime.now().add(const Duration(days: 365 * 10)),
+                      initialDate: startAt ?? DateTime.now(),
+                      firstDate: DateTime.now(),
+                      lastDate: DateTime.now().add(365.days),
                     );
                     if (date != null) {
                       startAtController.text = DateFormat.yMd().format(date);
-                      budget.startAt = date;
+                      setState(() {
+                        startAt = date;
+                        if (endAt != null && date > endAt!) {
+                          endAt = null;
+                          endAtController.clear();
+                        }
+                      });
                     }
                     validate();
                   },
@@ -77,20 +96,18 @@ class _BudgetBottomSheetState extends State<BudgetBottomSheet> {
               ),
               TextFormField(
                 controller: endAtController,
+                enabled: startAt != null,
                 readOnly: true,
                 onTap: () async {
                   final date = await showDatePicker(
                     context: context,
-                    initialDate: DateTime.now(),
-                    firstDate: DateTime.now().subtract(
-                      const Duration(days: 365 * 10),
-                    ),
-                    lastDate:
-                        DateTime.now().add(const Duration(days: 365 * 10)),
+                    initialDate: endAt ?? startAt!,
+                    firstDate: startAt!,
+                    lastDate: startAt!.add(365.days),
                   );
                   if (date != null) {
                     endAtController.text = DateFormat.yMd().format(date);
-                    budget.endAt = date;
+                    setState(() => endAt = date);
                   }
                   validate();
                 },
@@ -109,8 +126,11 @@ class _BudgetBottomSheetState extends State<BudgetBottomSheet> {
         TextButton(
           onPressed: canSave
               ? () {
-                  budget.title = titleController.text.trim();
-                  Navigator.pop(context, budget);
+                  final result = widget.budget ?? Budget.lazy();
+                  result.title = titleController.text.trim();
+                  result.startAt = startAt!;
+                  result.endAt = endAt!;
+                  Navigator.pop(context, result);
                 }
               : null,
           child: const Text('SALVAR'),
@@ -122,8 +142,8 @@ class _BudgetBottomSheetState extends State<BudgetBottomSheet> {
   void validate() {
     setState(() {
       canSave = titleController.text.trim().isNotEmpty &&
-          startAtController.text.isNotEmpty &&
-          endAtController.text.isNotEmpty;
+          startAt != null &&
+          endAt != null;
     });
   }
 }
