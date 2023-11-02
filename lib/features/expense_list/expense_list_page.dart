@@ -36,29 +36,58 @@ class ExpenseListPage extends StatelessWidget with InitStateMixin {
           itemBuilder: (context, index) {
             final expense = controller.expenses[index];
             return ListTile(
+              contentPadding: const EdgeInsets.fromLTRB(16, 0, 4, 0),
               title: Text(expense.title),
               leading: const Icon(Icons.attach_money_outlined),
               subtitle: Text(DateFormat.yMd().format(expense.madeAt)),
-              trailing: Text(CurrencyFormatter().format(expense.value)),
-              onLongPress: () => showDialog(
-                context: context,
-                builder: (context) => AlertDialog(
-                  title: const Text('Deletar despesa?'),
-                  actions: [
-                    TextButton(
-                      onPressed: () async {
-                        Navigator.pop(context);
-                        await controller.delete(expense);
-                        controller.fetch();
-                      },
-                      child: const Text('SIM'),
-                    ),
-                    TextButton(
-                      onPressed: () => Navigator.pop(context),
-                      child: const Text('NÃO'),
-                    ),
-                  ],
-                ),
+              trailing: Wrap(
+                crossAxisAlignment: WrapCrossAlignment.center,
+                children: [
+                  Text(CurrencyFormatter().format(expense.value)),
+                  PopupMenuButton(
+                    itemBuilder: (context) => [
+                      PopupMenuItem(
+                        onTap: () async {
+                          final result = await showModalBottomSheet<Expense>(
+                            context: context,
+                            builder: (context) => ExpenseBottomSheet(
+                              category: expense.category,
+                              expense: expense,
+                            ),
+                          );
+                          if (result != null) {
+                            await controller.update(expense);
+                          }
+                          controller.fetch();
+                        },
+                        child: const Text('Editar'),
+                      ),
+                      PopupMenuItem(
+                        onTap: () => showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: const Text('Deletar despesa?'),
+                            actions: [
+                              TextButton(
+                                onPressed: () async {
+                                  Navigator.pop(context);
+                                  await controller.delete(expense);
+                                  controller.fetch();
+                                },
+                                child: const Text('SIM'),
+                              ),
+                              TextButton(
+                                onPressed: () => Navigator.pop(context),
+                                child: const Text('NÃO'),
+                              ),
+                            ],
+                          ),
+                        ),
+                        child: const Text('Apagar'),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             );
           },

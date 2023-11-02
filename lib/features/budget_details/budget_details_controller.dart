@@ -1,5 +1,4 @@
 import 'package:mobx/mobx.dart';
-import 'package:uuid/v4.dart';
 
 import '../../core/entities/budget.dart';
 import '../../core/entities/category.dart';
@@ -40,22 +39,13 @@ abstract class BudgetDetailsControllerBase with Store {
     }
   }
 
-  Future<void> createCategory(Budget budget, Category category) =>
-      _categoryRepository.create(
-        Category(
-          id: const UuidV4().generate(),
-          budget: budget,
-          title: category.title,
-          icon: category.icon,
-          color: category.color,
-          budgetLimit: 0,
-        ),
-      );
+  Future<void> createCategory(Category category) =>
+      _categoryRepository.create(category);
 
   Future<void> deleteCategory(Category category) =>
       _categoryRepository.delete(category);
 
-  Future<void> update(Category category) =>
+  Future<void> updateCategory(Category category) =>
       _categoryRepository.update(category);
 
   double utilizeValueOf(Category category) {

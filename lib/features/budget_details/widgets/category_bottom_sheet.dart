@@ -26,8 +26,10 @@ class _CategoryBottomSheetState extends State<CategoryBottomSheet> {
   @override
   void initState() {
     super.initState();
-    titleController.text = widget.category?.title ?? '';
-    budgetLimitController.text = widget.category?.budgetLimit.toString() ?? '';
+    if (widget.category != null) {
+      titleController.text = widget.category!.title;
+      budgetLimitController.text = widget.category!.budgetLimit.toString();
+    }
     icon = widget.category?.icon ?? Category.icons.values.first;
     color = widget.category?.color ?? Category.colors.first;
     validate();
@@ -39,7 +41,7 @@ class _CategoryBottomSheetState extends State<CategoryBottomSheet> {
       backgroundColor: Colors.transparent,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        title: Text('${widget.category == null ? 'Nova' : 'Editar'} categoria'),
+        title: Text('${widget.category != null ? 'Editar' : 'Nova'} categoria'),
         leading: IconButton(
           onPressed: () => Navigator.pop(context),
           icon: const Icon(Icons.close),
@@ -48,7 +50,7 @@ class _CategoryBottomSheetState extends State<CategoryBottomSheet> {
       body: ListView(
         children: [
           Padding(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
             child: TextFormField(
               keyboardType: TextInputType.name,
               controller: titleController,

@@ -1,3 +1,5 @@
+import 'package:uuid/v4.dart';
+
 import '../datasources/category_datasource.dart';
 import '../entities/budget.dart';
 import '../entities/category.dart';
@@ -14,8 +16,10 @@ class CategoryRepository {
     return data.map((e) => _mapper.toEntity(budget, e)).toList();
   }
 
-  Future<void> create(Category category) =>
-      _datasource.create(_mapper.toDTO(category));
+  Future<void> create(Category category) {
+    category.id = const UuidV4().generate();
+    return _datasource.create(_mapper.toDTO(category));
+  }
 
   Future<void> delete(Category category) => _datasource.deleteById(category.id);
 

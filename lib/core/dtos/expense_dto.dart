@@ -1,9 +1,11 @@
 import 'package:json_annotation/json_annotation.dart';
 
+import 'dto.dart';
+
 part 'expense_dto.g.dart';
 
 @JsonSerializable()
-class ExpenseDTO {
+class ExpenseDTO extends DTO {
   final String id;
   final String categoryId;
   final String title;

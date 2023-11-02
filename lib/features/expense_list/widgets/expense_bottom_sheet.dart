@@ -6,10 +6,12 @@ import '../../../core/entities/expense.dart';
 
 class ExpenseBottomSheet extends StatefulWidget {
   final Category category;
+  final Expense? expense;
 
   const ExpenseBottomSheet({
     super.key,
     required this.category,
+    this.expense,
   });
 
   @override
@@ -20,8 +22,20 @@ class _ExpenseBottomSheetState extends State<ExpenseBottomSheet> {
   final titleController = TextEditingController();
   final valueController = TextEditingController();
   final madeAtController = TextEditingController();
-  final expense = Expense.lazy();
-  var canSave = false;
+  DateTime? madeAt;
+  late bool canSave;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.expense != null) {
+      titleController.text = widget.expense!.title;
+      valueController.text = widget.expense!.value.toString();
+      madeAtController.text = DateFormat.yMd().format(widget.expense!.madeAt);
+      madeAt = widget.expense!.madeAt;
+    }
+    validate();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +46,7 @@ class _ExpenseBottomSheetState extends State<ExpenseBottomSheet> {
           onPressed: () => Navigator.of(context).pop(),
           icon: const Icon(Icons.close),
         ),
-        title: const Text('Nova despesa'),
+        title: Text('${widget.expense != null ? 'Editar' : 'Nova'} despesa'),
         backgroundColor: Colors.transparent,
       ),
       body: ListView(
@@ -43,6 +57,7 @@ class _ExpenseBottomSheetState extends State<ExpenseBottomSheet> {
               children: [
                 TextFormField(
                   controller: titleController,
+                  onChanged: (_) => validate(),
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                     hintText: 'Título',
@@ -63,7 +78,6 @@ class _ExpenseBottomSheetState extends State<ExpenseBottomSheet> {
                 TextFormField(
                   controller: madeAtController,
                   readOnly: true,
-                  onChanged: (_) => validate(),
                   decoration: const InputDecoration(
                     prefixIcon: Icon(Icons.event_outlined),
                     border: OutlineInputBorder(),
@@ -82,7 +96,7 @@ class _ExpenseBottomSheetState extends State<ExpenseBottomSheet> {
                       lastDate: widget.category.budget.endAt,
                     );
                     if (date != null) {
-                      expense.madeAt = date;
+                      madeAt = date;
                       madeAtController.text = DateFormat.yMMMEd().format(date);
                     }
                     validate();
@@ -98,9 +112,12 @@ class _ExpenseBottomSheetState extends State<ExpenseBottomSheet> {
         TextButton(
           onPressed: canSave
               ? () {
-                  expense.title = titleController.text.trim();
-                  expense.value = double.parse(valueController.text.trim());
-                  Navigator.of(context).pop(expense);
+                  final result = widget.expense ?? Expense.lazy();
+                  result.category = widget.category;
+                  result.title = titleController.text.trim();
+                  result.value = double.parse(valueController.text.trim());
+                  result.madeAt = madeAt!;
+                  Navigator.of(context).pop(result);
                 }
               : null,
           child: const Text('SALVAR'),
@@ -112,6 +129,6 @@ class _ExpenseBottomSheetState extends State<ExpenseBottomSheet> {
   void validate() => setState(() {
         canSave = titleController.text.trim().isNotEmpty &&
             valueController.text.trim().isNotEmpty &&
-            madeAtController.text.trim().isNotEmpty;
+            madeAt != null;
       });
 }

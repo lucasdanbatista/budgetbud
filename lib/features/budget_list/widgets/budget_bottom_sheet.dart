@@ -47,7 +47,7 @@ class _BudgetBottomSheetState extends State<BudgetBottomSheet> {
           icon: const Icon(Icons.close),
           onPressed: () => Navigator.pop(context),
         ),
-        title: Text('${widget.budget != null ? 'Novo' : 'Editar'} orçamento'),
+        title: Text('${widget.budget != null ? 'Editar' : 'Novo'} orçamento'),
         backgroundColor: Colors.transparent,
       ),
       body: SingleChildScrollView(

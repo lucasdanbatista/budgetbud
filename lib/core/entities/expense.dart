@@ -3,7 +3,7 @@ import 'entity.dart';
 
 class Expense extends Entity {
   late final String id;
-  late final Category category;
+  late Category category;
   late String title;
   late double value;
   late DateTime madeAt;

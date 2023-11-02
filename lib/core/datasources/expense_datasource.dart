@@ -5,6 +5,8 @@ import '../dtos/expense_dto.dart';
 abstract interface class ExpenseDatasource {
   factory ExpenseDatasource.local(Database database) = _LocalExpenseDatasource;
 
+  Future<void> update(ExpenseDTO expense);
+
   Future<void> create(ExpenseDTO expense);
 
   Future<void> deleteById(String id);
@@ -16,6 +18,14 @@ class _LocalExpenseDatasource implements ExpenseDatasource {
   final Database _database;
 
   _LocalExpenseDatasource(this._database);
+
+  @override
+  Future<void> update(ExpenseDTO expense) => _database.update(
+        'Expense',
+        expense.toJson(),
+        where: 'id = ?',
+        whereArgs: [expense.id],
+      );
 
   @override
   Future<void> create(ExpenseDTO expense) =>

@@ -1,7 +1,6 @@
 import 'package:uuid/v4.dart';
 
 import '../datasources/expense_datasource.dart';
-import '../dtos/expense_dto.dart';
 import '../entities/category.dart';
 import '../entities/expense.dart';
 import '../mappers/expense_mapper.dart';
@@ -12,20 +11,18 @@ class ExpenseRepository {
 
   ExpenseRepository(this._datasource, this._mapper);
 
-  Future<void> create(Expense expense, Category category) => _datasource.create(
-        ExpenseDTO(
-          id: const UuidV4().generate(),
-          title: expense.title,
-          categoryId: category.id,
-          value: expense.value,
-          madeAt: expense.madeAt,
-        ),
-      );
+  Future<void> create(Expense expense) {
+    expense.id = const UuidV4().generate();
+    return _datasource.create(_mapper.toDTO(expense));
+  }
 
   Future<List<Expense>> findAll(Category category) async {
     final data = await _datasource.findAllByCategoryId(category.id);
     return data.map((e) => _mapper.toEntity(e, category)).toList();
   }
+
+  Future<void> update(Expense expense) =>
+      _datasource.update(_mapper.toDTO(expense));
 
   Future<void> delete(Expense expense) => _datasource.deleteById(expense.id);
 }

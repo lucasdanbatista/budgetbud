@@ -22,10 +22,13 @@ abstract class ExpenseListControllerBase with Store {
   Future<void> fetch() async =>
       expenses = ObservableList.of(await _repository.findAll(category));
 
+  Future<void> update(Expense expense) => _repository.update(expense);
+
   Future<void> delete(Expense expense) => _repository.delete(expense);
 
   Future<void> create(Expense expense) async {
-    await _repository.create(expense, category);
+    expense.category = category;
+    await _repository.create(expense);
     await fetch();
   }
 }
