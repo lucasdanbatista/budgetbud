@@ -52,6 +52,7 @@ class CategoryListTile extends StatelessWidget {
           const Padding(padding: EdgeInsets.only(top: 4)),
           LinearProgressIndicator(
             value: utilizedPercentage,
+            color: category.color,
           ),
           const Padding(padding: EdgeInsets.only(top: 8)),
           Text(
