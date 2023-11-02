@@ -1,9 +1,11 @@
 import 'package:json_annotation/json_annotation.dart';
 
+import 'dto.dart';
+
 part 'budget_dto.g.dart';
 
 @JsonSerializable()
-class BudgetDTO {
+class BudgetDTO extends DTO {
   final String id;
   final String title;
   final DateTime startAt;

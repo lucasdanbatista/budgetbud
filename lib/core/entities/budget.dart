@@ -1,10 +1,11 @@
+import '../../utils/extensions/date_time.dart';
 import 'entity.dart';
 
 class Budget extends Entity {
   late final String id;
   late String title;
-  late DateTime startAt;
-  late DateTime endAt;
+  DateTime? _startAt;
+  DateTime? _endAt;
 
   Budget.lazy({
     String? id,
@@ -30,4 +31,18 @@ class Budget extends Entity {
         startAt: startAt,
         endAt: endAt,
       );
+
+  DateTime get startAt => _startAt!;
+
+  set startAt(DateTime value) {
+    if (_endAt != null) assert(value < _endAt!);
+    _startAt = value;
+  }
+
+  DateTime get endAt => _endAt!;
+
+  set endAt(DateTime value) {
+    if (_startAt != null) assert(value > _startAt!);
+    _endAt = value;
+  }
 }
