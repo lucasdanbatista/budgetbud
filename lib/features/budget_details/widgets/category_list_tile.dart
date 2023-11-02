@@ -24,7 +24,7 @@ class CategoryListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      contentPadding: const EdgeInsets.fromLTRB(16, 8, 0, 8),
+      contentPadding: const EdgeInsets.fromLTRB(16, 4, 4, 4),
       leading: CircleAvatar(
         backgroundColor: category.color,
         child: Icon(

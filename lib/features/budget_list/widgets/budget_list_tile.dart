@@ -20,6 +20,7 @@ class BudgetListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       title: Text(budget.title),
+      contentPadding: const EdgeInsets.only(left: 16, right: 4),
       trailing: PopupMenuButton(
         itemBuilder: (context) => [
           PopupMenuItem(
