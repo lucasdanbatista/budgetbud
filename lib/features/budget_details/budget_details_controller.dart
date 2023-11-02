@@ -47,7 +47,7 @@ abstract class BudgetDetailsControllerBase with Store {
           budget: budget,
           title: category.title,
           icon: category.icon,
-          backgroundColor: category.backgroundColor,
+          color: category.color,
           budgetLimit: 0,
         ),
       );
@@ -55,8 +55,8 @@ abstract class BudgetDetailsControllerBase with Store {
   Future<void> deleteCategory(Category category) =>
       _categoryRepository.delete(category);
 
-  Future<void> updateLimit(Category category, double newLimit) =>
-      _categoryRepository.updateLimit(category, newLimit);
+  Future<void> update(Category category) =>
+      _categoryRepository.update(category);
 
   double utilizeValueOf(Category category) {
     final expenses = this.expenses.where((e) => e.category.id == category.id);
