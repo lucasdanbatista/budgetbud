@@ -8,8 +8,8 @@ class CategoryListTile extends StatelessWidget {
   final double utilizedPercentage;
   final double utilizedValue;
   final VoidCallback onTap;
-  final VoidCallback onLongPress;
-  final ValueChanged<double> onLimitChanged;
+  final VoidCallback onEditPressed;
+  final VoidCallback onDeletePressed;
 
   const CategoryListTile(
     this.category, {
@@ -17,8 +17,8 @@ class CategoryListTile extends StatelessWidget {
     required this.utilizedPercentage,
     required this.utilizedValue,
     required this.onTap,
-    required this.onLongPress,
-    required this.onLimitChanged,
+    required this.onEditPressed,
+    required this.onDeletePressed,
   });
 
   @override
@@ -26,7 +26,7 @@ class CategoryListTile extends StatelessWidget {
     return ListTile(
       contentPadding: const EdgeInsets.fromLTRB(16, 8, 0, 8),
       leading: CircleAvatar(
-        backgroundColor: category.backgroundColor,
+        backgroundColor: category.color,
         child: Icon(
           category.icon,
           color: Colors.white,
@@ -36,42 +36,12 @@ class CategoryListTile extends StatelessWidget {
       trailing: PopupMenuButton(
         itemBuilder: (BuildContext context) => [
           PopupMenuItem(
+            onTap: onEditPressed,
             child: const Text('Editar'),
-            onTap: () async {
-              final limitController = TextEditingController();
-              limitController.text = category.budgetLimit.toString();
-              final limit = await showDialog<double>(
-                context: context,
-                builder: (context) => AlertDialog(
-                  title: Text(category.title),
-                  content: TextFormField(
-                    controller: limitController,
-                    keyboardType: TextInputType.number,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      hintText: '0.0',
-                      labelText: 'Limite',
-                    ),
-                  ),
-                  actions: [
-                    TextButton(
-                      onPressed: () => Navigator.pop(context),
-                      child: const Text('CANCELAR'),
-                    ),
-                    TextButton(
-                      onPressed: () => Navigator.pop(
-                        context,
-                        double.parse(limitController.text.trim()),
-                      ),
-                      child: const Text('SALVAR'),
-                    ),
-                  ],
-                ),
-              );
-              if (limit != null) {
-                onLimitChanged(limit);
-              }
-            },
+          ),
+          PopupMenuItem(
+            onTap: onDeletePressed,
+            child: const Text('Deletar'),
           ),
         ],
       ),
@@ -92,7 +62,6 @@ class CategoryListTile extends StatelessWidget {
         ],
       ),
       onTap: onTap,
-      onLongPress: onLongPress,
     );
   }
 }

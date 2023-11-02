@@ -5,10 +5,10 @@ import 'entity.dart';
 
 class Category extends Entity {
   late final String id;
-  late final String title;
-  late final IconData icon;
-  late final Color backgroundColor;
-  late final double budgetLimit;
+  late String title;
+  late IconData icon;
+  late Color color;
+  late double budgetLimit;
   late final Budget budget;
   static const icons = {
     'ic_restaurant_outlined': Icons.restaurant_outlined,
@@ -57,14 +57,14 @@ class Category extends Entity {
     Budget? budget,
     String? title,
     IconData? icon,
-    Color? backgroundColor,
+    Color? color,
     double? budgetLimit,
   }) {
     if (id != null) this.id = id;
     if (budget != null) this.budget = budget;
     if (title != null) this.title = title;
     if (icon != null) this.icon = icon;
-    if (backgroundColor != null) this.backgroundColor = backgroundColor;
+    if (color != null) this.color = color;
     if (budgetLimit != null) this.budgetLimit = budgetLimit;
   }
 
@@ -73,7 +73,7 @@ class Category extends Entity {
     required Budget budget,
     required String title,
     required IconData icon,
-    required Color backgroundColor,
+    required Color color,
     required double budgetLimit,
   }) =>
       Category.lazy(
@@ -81,7 +81,7 @@ class Category extends Entity {
         budget: budget,
         title: title,
         icon: icon,
-        backgroundColor: backgroundColor,
+        color: color,
         budgetLimit: budgetLimit,
       );
 }

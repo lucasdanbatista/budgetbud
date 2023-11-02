@@ -48,11 +48,19 @@ class BudgetDetailsPage extends StatelessWidget with InitStateMixin {
                 category,
                 utilizedValue: controller.utilizeValueOf(category),
                 utilizedPercentage: controller.utilizedPercentageOf(category),
-                onLimitChanged: (limit) async {
-                  await controller.updateLimit(category, limit);
+                onEditPressed: () async {
+                  final result = await showModalBottomSheet<Category>(
+                    context: context,
+                    builder: (context) => CategoryBottomSheet(
+                      category: category,
+                    ),
+                  );
+                  if (result != null) {
+                    await controller.update(result);
+                  }
                   controller.fetch(budget);
                 },
-                onLongPress: () => showDialog(
+                onDeletePressed: () => showDialog(
                   context: context,
                   builder: (context) => AlertDialog(
                     title: const Text('Deletar categoria?'),

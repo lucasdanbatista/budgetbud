@@ -19,6 +19,6 @@ class CategoryRepository {
 
   Future<void> delete(Category category) => _datasource.deleteById(category.id);
 
-  Future<void> updateLimit(Category category, double newLimit) =>
-      _datasource.updateLimit(category.id, newLimit);
+  Future<void> update(Category category) =>
+      _datasource.update(_mapper.toDTO(category));
 }

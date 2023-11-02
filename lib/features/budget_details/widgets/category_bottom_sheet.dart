@@ -5,7 +5,12 @@ import 'category_colors_bottom_sheet.dart';
 import 'category_icons_bottom_sheet.dart';
 
 class CategoryBottomSheet extends StatefulWidget {
-  const CategoryBottomSheet({super.key});
+  final Category? category;
+
+  const CategoryBottomSheet({
+    super.key,
+    this.category,
+  });
 
   @override
   State<CategoryBottomSheet> createState() => _CategoryBottomSheetState();
@@ -13,9 +18,20 @@ class CategoryBottomSheet extends StatefulWidget {
 
 class _CategoryBottomSheetState extends State<CategoryBottomSheet> {
   final titleController = TextEditingController();
-  var icon = Category.icons.values.first;
-  var color = Category.colors.first;
-  var canSave = false;
+  final budgetLimitController = TextEditingController();
+  late IconData icon;
+  late Color color;
+  late bool canSave;
+
+  @override
+  void initState() {
+    super.initState();
+    titleController.text = widget.category?.title ?? '';
+    budgetLimitController.text = widget.category?.budgetLimit.toString() ?? '';
+    icon = widget.category?.icon ?? Category.icons.values.first;
+    color = widget.category?.color ?? Category.colors.first;
+    validate();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +39,7 @@ class _CategoryBottomSheetState extends State<CategoryBottomSheet> {
       backgroundColor: Colors.transparent,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        title: const Text('Nova categoria'),
+        title: Text('${widget.category == null ? 'Nova' : 'Editar'} categoria'),
         leading: IconButton(
           onPressed: () => Navigator.pop(context),
           icon: const Icon(Icons.close),
@@ -40,6 +56,18 @@ class _CategoryBottomSheetState extends State<CategoryBottomSheet> {
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 hintText: 'Título',
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
+            child: TextFormField(
+              keyboardType: TextInputType.number,
+              controller: budgetLimitController,
+              onChanged: (_) => validate(),
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                hintText: 'Limite',
               ),
             ),
           ),
@@ -74,14 +102,15 @@ class _CategoryBottomSheetState extends State<CategoryBottomSheet> {
       persistentFooterButtons: [
         TextButton(
           onPressed: canSave
-              ? () => Navigator.pop(
-                    context,
-                    Category.lazy(
-                      title: titleController.text.trim(),
-                      icon: icon,
-                      backgroundColor: color,
-                    ),
-                  )
+              ? () {
+                  final result = widget.category ?? Category.lazy();
+                  result.title = titleController.text.trim();
+                  result.budgetLimit =
+                      double.parse(budgetLimitController.text.trim());
+                  result.icon = icon;
+                  result.color = color;
+                  Navigator.pop(context, result);
+                }
               : null,
           child: const Text('SALVAR'),
         ),
@@ -89,7 +118,8 @@ class _CategoryBottomSheetState extends State<CategoryBottomSheet> {
     );
   }
 
-  void validate() {
-    setState(() => canSave = titleController.text.trim().isNotEmpty);
-  }
+  void validate() => setState(
+        () => canSave = titleController.text.trim().isNotEmpty &&
+            budgetLimitController.text.trim().isNotEmpty,
+      );
 }
