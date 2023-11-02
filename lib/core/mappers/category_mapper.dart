@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../dtos/category_dto.dart';
 import '../entities/budget.dart';
 import '../entities/category.dart';
+import '../entities/expense.dart';
 import 'color_mapper.dart';
 import 'dto_mapper.dart';
 
@@ -11,8 +12,8 @@ class CategoryMapper implements DTOMapper<Category, CategoryDTO> {
 
   CategoryMapper(this._colorMapper);
 
-  Category toEntity(Budget budget, CategoryDTO it) {
-    return Category(
+  Category toEntity(Budget budget, CategoryDTO it, {List<Expense>? expenses}) {
+    final category = Category(
       id: it.id,
       budget: budget,
       title: it.title,
@@ -20,6 +21,8 @@ class CategoryMapper implements DTOMapper<Category, CategoryDTO> {
       icon: Category.icons[it.iconName] ?? Icons.more_horiz_outlined,
       color: _colorMapper.mapToColor(it.backgroundColor),
     );
+    if (expenses != null) category.expenses = expenses;
+    return category;
   }
 
   @override
@@ -28,7 +31,7 @@ class CategoryMapper implements DTOMapper<Category, CategoryDTO> {
       id: it.id,
       budgetId: it.budget.id,
       title: it.title,
-      budgetLimit: it.budgetLimit,
+      budgetLimit: it.limit,
       iconName: Category.getIconName(it.icon),
       backgroundColor: _colorMapper.mapToString(it.color),
     );

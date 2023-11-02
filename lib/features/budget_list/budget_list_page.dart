@@ -55,8 +55,9 @@ class BudgetListPage extends StatelessWidget with InitStateMixin {
               onTap: () async {
                 await context.pushRoute(
                   BudgetDetailsRoute(
-                    budget: budget,
-                    controller: GetIt.I(),
+                    controller: GetIt.I(
+                      param1: budget,
+                    ),
                   ),
                 );
                 controller.fetch();

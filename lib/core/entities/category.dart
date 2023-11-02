@@ -3,14 +3,16 @@ import 'package:line_icons/line_icons.dart';
 
 import 'budget.dart';
 import 'entity.dart';
+import 'expense.dart';
 
 class Category extends Entity {
   late final String id;
   late String title;
   late IconData icon;
   late Color color;
-  late double budgetLimit;
+  late double limit;
   late final Budget budget;
+  late final List<Expense> expenses;
 
   static const icons = {
     '8d0486d6': LineIcons.pizzaSlice,
@@ -91,14 +93,14 @@ class Category extends Entity {
     String? title,
     IconData? icon,
     Color? color,
-    double? budgetLimit,
+    double? limit,
   }) {
     if (id != null) this.id = id;
     if (budget != null) this.budget = budget;
     if (title != null) this.title = title;
     if (icon != null) this.icon = icon;
     if (color != null) this.color = color;
-    if (budgetLimit != null) this.budgetLimit = budgetLimit;
+    if (limit != null) this.limit = limit;
   }
 
   factory Category({
@@ -115,6 +117,14 @@ class Category extends Entity {
         title: title,
         icon: icon,
         color: color,
-        budgetLimit: budgetLimit,
+        limit: budgetLimit,
       );
+
+  double get utilized {
+    var sum = 0.0;
+    for (final expense in expenses) {
+      sum += expense.value;
+    }
+    return sum;
+  }
 }

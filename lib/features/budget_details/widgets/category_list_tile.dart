@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/entities/category.dart';
-import '../../../utils/formatters/currency_formatter.dart';
+import '../../../widgets/budget_limit_progress_bar.dart';
 
 class CategoryListTile extends StatelessWidget {
   final Category category;
-  final double utilizedPercentage;
-  final double utilizedValue;
   final VoidCallback onTap;
   final VoidCallback onEditPressed;
   final VoidCallback onDeletePressed;
@@ -14,8 +12,6 @@ class CategoryListTile extends StatelessWidget {
   const CategoryListTile(
     this.category, {
     super.key,
-    required this.utilizedPercentage,
-    required this.utilizedValue,
     required this.onTap,
     required this.onEditPressed,
     required this.onDeletePressed,
@@ -46,21 +42,10 @@ class CategoryListTile extends StatelessWidget {
         ],
       ),
       title: Text(category.title),
-      subtitle: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Padding(padding: EdgeInsets.only(top: 4)),
-          LinearProgressIndicator(
-            value: utilizedPercentage,
-            color: category.color,
-          ),
-          const Padding(padding: EdgeInsets.only(top: 8)),
-          Text(
-            '${CurrencyFormatter().format(utilizedValue)} de '
-            '${CurrencyFormatter().format(category.budgetLimit)}',
-            style: Theme.of(context).textTheme.labelSmall,
-          ),
-        ],
+      subtitle: BudgetLimitProgressBar(
+        utilized: category.utilized,
+        limit: category.limit,
+        color: category.color,
       ),
       onTap: onTap,
     );

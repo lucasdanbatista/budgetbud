@@ -11,6 +11,8 @@ abstract interface class BudgetDatasource {
 
   Future<void> deleteById(String id);
 
+  Future<BudgetDTO> findById(String id);
+
   Future<List<BudgetDTO>> findAll();
 }
 
@@ -39,5 +41,15 @@ class _LocalBudgetDatasource implements BudgetDatasource {
   Future<List<BudgetDTO>> findAll() async {
     final data = await _database.query('Budget');
     return data.map(BudgetDTO.fromJson).toList();
+  }
+
+  @override
+  Future<BudgetDTO> findById(String id) async {
+    final data = await _database.query(
+      'Budget',
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+    return BudgetDTO.fromJson(data.first);
   }
 }

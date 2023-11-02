@@ -28,7 +28,7 @@ class _CategoryBottomSheetState extends State<CategoryBottomSheet> {
     super.initState();
     if (widget.category != null) {
       titleController.text = widget.category!.title;
-      budgetLimitController.text = widget.category!.budgetLimit.toString();
+      budgetLimitController.text = widget.category!.limit.toString();
     }
     icon = widget.category?.icon ?? Category.icons.values.first;
     color = widget.category?.color ?? Category.colors.first;
@@ -107,7 +107,7 @@ class _CategoryBottomSheetState extends State<CategoryBottomSheet> {
               ? () {
                   final result = widget.category ?? Category.lazy();
                   result.title = titleController.text.trim();
-                  result.budgetLimit =
+                  result.limit =
                       double.parse(budgetLimitController.text.trim());
                   result.icon = icon;
                   result.color = color;

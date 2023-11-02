@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/entities/budget.dart';
+import '../../../widgets/budget_limit_progress_bar.dart';
 
 class BudgetListTile extends StatelessWidget {
   final Budget budget;
@@ -20,6 +21,10 @@ class BudgetListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       title: Text(budget.title),
+      subtitle: BudgetLimitProgressBar(
+        utilized: budget.utilized,
+        limit: budget.limit,
+      ),
       contentPadding: const EdgeInsets.only(left: 16, right: 4),
       trailing: PopupMenuButton(
         itemBuilder: (context) => [
