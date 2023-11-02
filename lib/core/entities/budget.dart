@@ -35,14 +35,14 @@ class Budget extends Entity {
   DateTime get startAt => _startAt!;
 
   set startAt(DateTime value) {
-    if (_endAt != null) assert(value < _endAt!);
+    if (_endAt != null) assert(value <= _endAt!);
     _startAt = value;
   }
 
   DateTime get endAt => _endAt!;
 
   set endAt(DateTime value) {
-    if (_startAt != null) assert(value > _startAt!);
+    if (_startAt != null) assert(value >= _startAt!);
     _endAt = value;
   }
 }

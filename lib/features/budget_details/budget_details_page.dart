@@ -56,7 +56,7 @@ class BudgetDetailsPage extends StatelessWidget with InitStateMixin {
                     ),
                   );
                   if (result != null) {
-                    await controller.update(result);
+                    await controller.updateCategory(result);
                   }
                   controller.fetch(budget);
                 },
@@ -102,7 +102,8 @@ class BudgetDetailsPage extends StatelessWidget with InitStateMixin {
             builder: (context) => const CategoryBottomSheet(),
           );
           if (category != null) {
-            await controller.createCategory(budget, category);
+            category.budget = budget;
+            await controller.createCategory(category);
           }
           controller.fetch(budget);
         },
