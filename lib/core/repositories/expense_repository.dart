@@ -18,7 +18,9 @@ class ExpenseRepository {
 
   Future<List<Expense>> findAll(Category category) async {
     final data = await _datasource.findAllByCategoryId(category.id);
-    return data.map((e) => _mapper.toEntity(e, category)).toList();
+    final expenses = data.map((e) => _mapper.toEntity(e, category)).toList();
+    expenses.sort((a, b) => b.madeAt.compareTo(a.madeAt));
+    return expenses;
   }
 
   Future<void> update(Expense expense) =>

@@ -23,6 +23,7 @@ class CategoryRepository {
     for (final category in categories) {
       category.expenses = await _expenseRepository.findAll(category);
     }
+    categories.sort((a, b) => a.title.compareTo(b.title));
     return categories;
   }
 
