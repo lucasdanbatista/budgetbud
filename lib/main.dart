@@ -11,6 +11,8 @@ import 'features/budget_details/budget_details_module.dart';
 import 'features/budget_list/budget_list_module.dart';
 import 'features/category_details/category_details_module.dart';
 import 'features/expense_list/expense_list_module.dart';
+import 'features/settings/settings_controller.dart';
+import 'features/settings/settings_module.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,6 +25,13 @@ Future<void> main() async {
     BudgetDetailsModule(),
     CategoryDetailsModule(),
     ExpenseListModule(),
+    SettingsModule(),
   ]);
-  runApp(MainApp(router: GetIt.I()));
+  await GetIt.I<SettingsController>().fetch();
+  runApp(
+    MainApp(
+      router: GetIt.I(),
+      settingsController: GetIt.I(),
+    ),
+  );
 }

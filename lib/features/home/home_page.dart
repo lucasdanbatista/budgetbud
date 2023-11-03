@@ -37,7 +37,9 @@ class _HomePageState extends State<HomePage> {
             budgetListController: GetIt.I(),
             controller: GetIt.I(),
           ),
-          const SettingsPage(),
+          SettingsPage(
+            controller: GetIt.I(),
+          ),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(

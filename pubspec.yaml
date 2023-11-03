@@ -19,6 +19,7 @@ dependencies:
   json_annotation: ^4.8.1
   line_icons: ^2.0.3
   mobx: ^2.2.1
+  shared_preferences: ^2.2.2
   sqflite: ^2.3.0
   uuid: ^4.1.0
 
