@@ -26,32 +26,9 @@ class BudgetListTile extends StatelessWidget {
         limit: budget.limit,
       ),
       contentPadding: const EdgeInsets.only(left: 16, right: 4),
-      trailing: PopupMenuButton(
-        itemBuilder: (context) => [
-          PopupMenuItem(
-            onTap: onEditPressed,
-            child: const Text('Editar'),
-          ),
-          PopupMenuItem(
-            onTap: () => showDialog(
-              context: context,
-              builder: (context) => AlertDialog(
-                title: const Text('Deletar orçamento?'),
-                actions: [
-                  TextButton(
-                    onPressed: onDeletePressed,
-                    child: const Text('SIM'),
-                  ),
-                  TextButton(
-                    onPressed: () => Navigator.pop(context),
-                    child: const Text('NÃO'),
-                  ),
-                ],
-              ),
-            ),
-            child: const Text('Deletar'),
-          ),
-        ],
+      trailing: IconButton(
+        icon: const Icon(Icons.more_vert),
+        onPressed: onEditPressed,
       ),
       onTap: onTap,
     );

@@ -7,10 +7,12 @@ import 'category_icons_bottom_sheet.dart';
 
 class CategoryBottomSheet extends StatefulWidget {
   final Category? category;
+  final ValueChanged<Category>? onDeletePressed;
 
   const CategoryBottomSheet({
     super.key,
     this.category,
+    this.onDeletePressed,
   });
 
   @override
@@ -112,23 +114,7 @@ class _CategoryBottomSheetState extends State<CategoryBottomSheet> {
         ],
       ),
       persistentFooterAlignment: AlignmentDirectional.center,
-      persistentFooterButtons: [
-        TextButton(
-          onPressed: canSave
-              ? () {
-                  final result = widget.category ?? Category.lazy();
-                  result.title = titleController.text.trim();
-                  result.limit = budgetLimitMask.unmaskText(
-                    budgetLimitController.text,
-                  );
-                  result.icon = icon;
-                  result.color = color;
-                  Navigator.pop(context, result);
-                }
-              : null,
-          child: const Text('SALVAR'),
-        ),
-      ],
+      persistentFooterButtons: _persistentFooterButtons,
     );
   }
 
@@ -136,4 +122,57 @@ class _CategoryBottomSheetState extends State<CategoryBottomSheet> {
         () => canSave = titleController.text.trim().isNotEmpty &&
             budgetLimitController.text.isNotEmpty,
       );
+
+  List<Widget> get _persistentFooterButtons {
+    final buttons = <Widget>[
+      TextButton(
+        onPressed: canSave
+            ? () {
+                final result = widget.category ?? Category.lazy();
+                result.title = titleController.text.trim();
+                result.limit = budgetLimitMask.unmaskText(
+                  budgetLimitController.text,
+                );
+                result.icon = icon;
+                result.color = color;
+                Navigator.pop(context, result);
+              }
+            : null,
+        child: const Text('SALVAR'),
+      ),
+    ];
+    if (widget.category != null) {
+      buttons.insert(
+        0,
+        TextButton(
+          style: TextButton.styleFrom(
+            foregroundColor: Colors.red.shade300,
+          ),
+          onPressed: () => showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: const Text('Deletar categoria?'),
+              actions: [
+                TextButton(
+                  onPressed: () async {
+                    Navigator.of(context)
+                      ..pop()
+                      ..pop();
+                    widget.onDeletePressed!(widget.category!);
+                  },
+                  child: const Text('SIM'),
+                ),
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text('NÃO'),
+                ),
+              ],
+            ),
+          ),
+          child: const Text('DELETAR'),
+        ),
+      );
+    }
+    return buttons;
+  }
 }

@@ -38,6 +38,7 @@ class _BudgetListPageState extends State<BudgetListPage>
     return Scaffold(
       body: Observer(
         builder: (context) => ListView.builder(
+          padding: const EdgeInsets.only(bottom: 96),
           itemCount: widget.controller.budgets.length,
           itemBuilder: (context, index) => BudgetListTile(
             widget.controller.budgets[index],
@@ -51,6 +52,7 @@ class _BudgetListPageState extends State<BudgetListPage>
                 context: context,
                 builder: (context) => BudgetBottomSheet(
                   budget: widget.controller.budgets[index],
+                  onDeletePressed: widget.controller.delete,
                 ),
               );
               if (result != null) {
