@@ -30,8 +30,8 @@ class _CategoryBottomSheetState extends State<CategoryBottomSheet> {
     super.initState();
     if (widget.category != null) {
       titleController.text = widget.category!.title;
-      budgetLimitController.text = budgetLimitMask.magicMask.getMaskedString(
-        widget.category!.limit.toString(),
+      budgetLimitController.text = budgetLimitMask.maskValue(
+        widget.category!.limit,
       );
     }
     icon = widget.category?.icon ?? Category.icons.values.first;
@@ -54,30 +54,34 @@ class _CategoryBottomSheetState extends State<CategoryBottomSheet> {
       body: ListView(
         children: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-            child: TextFormField(
-              keyboardType: TextInputType.name,
-              controller: titleController,
-              onChanged: (_) => validate(),
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: 'Título',
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
-            child: TextFormField(
-              inputFormatters: [budgetLimitMask],
-              maxLength: 12,
-              keyboardType: TextInputType.number,
-              controller: budgetLimitController,
-              onChanged: (_) => validate(),
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: 'Limite',
-                counter: SizedBox.shrink(),
-              ),
+            padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+            child: Column(
+              children: [
+                TextFormField(
+                  keyboardType: TextInputType.name,
+                  controller: titleController,
+                  onChanged: (_) => validate(),
+                  decoration: const InputDecoration(
+                    prefixIcon: Icon(Icons.title),
+                    border: OutlineInputBorder(),
+                    hintText: 'Título',
+                  ),
+                ),
+                const Padding(padding: EdgeInsets.only(top: 12)),
+                TextFormField(
+                  inputFormatters: [budgetLimitMask],
+                  maxLength: 9,
+                  keyboardType: TextInputType.number,
+                  controller: budgetLimitController,
+                  onChanged: (_) => validate(),
+                  decoration: const InputDecoration(
+                    prefixIcon: Icon(Icons.attach_money),
+                    border: OutlineInputBorder(),
+                    hintText: 'Limite',
+                    counter: SizedBox.shrink(),
+                  ),
+                ),
+              ],
             ),
           ),
           ListTile(
@@ -114,7 +118,7 @@ class _CategoryBottomSheetState extends State<CategoryBottomSheet> {
               ? () {
                   final result = widget.category ?? Category.lazy();
                   result.title = titleController.text.trim();
-                  result.limit = budgetLimitMask.unmask(
+                  result.limit = budgetLimitMask.unmaskText(
                     budgetLimitController.text,
                   );
                   result.icon = icon;

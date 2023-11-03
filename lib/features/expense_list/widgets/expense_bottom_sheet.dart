@@ -32,9 +32,7 @@ class _ExpenseBottomSheetState extends State<ExpenseBottomSheet> {
     super.initState();
     if (widget.expense != null) {
       titleController.text = widget.expense!.title;
-      valueController.text = valueMask.magicMask.getMaskedString(
-        widget.expense!.value.toString(),
-      );
+      valueController.text = valueMask.maskValue(widget.expense!.value);
       madeAtController.text = DateFormat.yMd().format(widget.expense!.madeAt);
       madeAt = widget.expense!.madeAt;
     }
@@ -70,7 +68,7 @@ class _ExpenseBottomSheetState extends State<ExpenseBottomSheet> {
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 12),
                   child: TextFormField(
-                    maxLength: 12,
+                    maxLength: 9,
                     inputFormatters: [valueMask],
                     controller: valueController,
                     onChanged: (_) => validate(),
@@ -122,7 +120,7 @@ class _ExpenseBottomSheetState extends State<ExpenseBottomSheet> {
                   final result = widget.expense ?? Expense.lazy();
                   result.category = widget.category;
                   result.title = titleController.text.trim();
-                  result.value = valueMask.unmask(valueController.text);
+                  result.value = valueMask.unmaskText(valueController.text);
                   result.madeAt = madeAt!;
                   Navigator.of(context).pop(result);
                 }
