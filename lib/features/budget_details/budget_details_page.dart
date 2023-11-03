@@ -28,49 +28,53 @@ class BudgetDetailsPage extends StatelessWidget {
           appBar: AppBar(
             title: Text(controller.budget.title),
           ),
-          body: ListView.builder(
-            padding: const EdgeInsets.only(
-              bottom: 120,
-            ),
-            itemCount: controller.budget.categories.length,
-            itemBuilder: (context, index) {
-              final category = controller.budget.categories[index];
-              return CategoryListTile(
-                category,
-                onEditPressed: () async {
-                  final result = await showModalBottomSheet<Category>(
-                    isScrollControlled: true,
-                    constraints: BoxConstraints(
-                      maxHeight: MediaQuery.of(context).size.height * 0.7,
-                      minHeight: MediaQuery.of(context).size.height * 0.7,
-                    ),
-                    context: context,
-                    builder: (context) => CategoryBottomSheet(
-                      category: category,
-                      onDeletePressed: (category) async {
-                        await controller.deleteCategory(category);
+          body: controller.budget.categories.isEmpty
+              ? const Center(
+                  child: Text('Não há categorias cadastradas.'),
+                )
+              : ListView.builder(
+                  padding: const EdgeInsets.only(
+                    bottom: 120,
+                  ),
+                  itemCount: controller.budget.categories.length,
+                  itemBuilder: (context, index) {
+                    final category = controller.budget.categories[index];
+                    return CategoryListTile(
+                      category,
+                      onEditPressed: () async {
+                        final result = await showModalBottomSheet<Category>(
+                          isScrollControlled: true,
+                          constraints: BoxConstraints(
+                            maxHeight: MediaQuery.of(context).size.height * 0.7,
+                            minHeight: MediaQuery.of(context).size.height * 0.7,
+                          ),
+                          context: context,
+                          builder: (context) => CategoryBottomSheet(
+                            category: category,
+                            onDeletePressed: (category) async {
+                              await controller.deleteCategory(category);
+                              controller.fetch();
+                            },
+                          ),
+                        );
+                        if (result != null) {
+                          await controller.updateCategory(result);
+                        }
                         controller.fetch();
                       },
-                    ),
-                  );
-                  if (result != null) {
-                    await controller.updateCategory(result);
-                  }
-                  controller.fetch();
-                },
-                onTap: () async {
-                  await context.pushRoute(
-                    CategoryDetailsRoute(
-                      controller: GetIt.I(
-                        param1: category,
-                      ),
-                    ),
-                  );
-                  controller.fetch();
-                },
-              );
-            },
-          ),
+                      onTap: () async {
+                        await context.pushRoute(
+                          CategoryDetailsRoute(
+                            controller: GetIt.I(
+                              param1: category,
+                            ),
+                          ),
+                        );
+                        controller.fetch();
+                      },
+                    );
+                  },
+                ),
           floatingActionButton: FloatingActionButton(
             onPressed: () async {
               final category = await showModalBottomSheet<Category>(

@@ -20,23 +20,28 @@ class ExpenseListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        children: expenses
-            .groupListsBy((e) => e.madeAt.dateOnly)
-            .keys
-            .map(
-              (key) => _Section(
-                date: key,
-                expenses:
-                    expenses.where((e) => e.madeAt.isSameDay(key)).toList(),
-                onUpdate: onUpdate,
-                onDelete: onDelete,
-              ),
-            )
-            .toList(),
-      ),
-    );
+    return expenses.isEmpty
+        ? const Center(
+            child: Text('Não há despesas cadastradas.'),
+          )
+        : SingleChildScrollView(
+            child: Column(
+              children: expenses
+                  .groupListsBy((e) => e.madeAt.dateOnly)
+                  .keys
+                  .map(
+                    (key) => _Section(
+                      date: key,
+                      expenses: expenses
+                          .where((e) => e.madeAt.isSameDay(key))
+                          .toList(),
+                      onUpdate: onUpdate,
+                      onDelete: onDelete,
+                    ),
+                  )
+                  .toList(),
+            ),
+          );
   }
 }
 
