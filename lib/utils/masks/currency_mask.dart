@@ -18,6 +18,6 @@ class CurrencyMask extends TextInputMask {
   }
 
   double unmaskText(String text) => double.parse(
-        text.replaceAll('.0', '00').replaceAll('.', '').replaceAll(',', '.'),
+        text.replaceAll('.00', '00').replaceAll('.', '').replaceAll(',', '.'),
       );
 }

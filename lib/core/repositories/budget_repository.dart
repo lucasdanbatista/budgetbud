@@ -29,6 +29,7 @@ class BudgetRepository {
     for (final budget in budgets) {
       budget.categories = await _categoryRepository.findAll(budget);
     }
+    budgets.sort((a, b) => a.endAt.compareTo(b.endAt));
     return budgets;
   }
 
