@@ -1,7 +1,7 @@
 import 'package:mobx/mobx.dart';
 
-import '../../core/entities/category.dart';
 import '../../core/entities/expense.dart';
+import '../../core/repositories/budget_repository.dart';
 import '../../core/repositories/expense_repository.dart';
 
 part 'expense_list_controller.g.dart';
@@ -10,25 +10,31 @@ class ExpenseListController = ExpenseListControllerBase
     with _$ExpenseListController;
 
 abstract class ExpenseListControllerBase with Store {
-  final Category category;
-  final ExpenseRepository _repository;
+  final BudgetRepository _budgetRepository;
+  final ExpenseRepository _expenseRepository;
 
-  ExpenseListControllerBase(this.category, this._repository);
+  ExpenseListControllerBase(
+    this._budgetRepository,
+    this._expenseRepository,
+  );
 
   @observable
   ObservableList<Expense> expenses = ObservableList();
 
   @action
-  Future<void> fetch() async =>
-      expenses = ObservableList.of(await _repository.findAll(category));
-
-  Future<void> update(Expense expense) => _repository.update(expense);
-
-  Future<void> delete(Expense expense) => _repository.delete(expense);
-
-  Future<void> create(Expense expense) async {
-    expense.category = category;
-    await _repository.create(expense);
-    await fetch();
+  Future<void> fetch() async {
+    final result = ObservableList<Expense>();
+    final budgets = await _budgetRepository.findAll();
+    for (final budget in budgets) {
+      for (final category in budget.categories) {
+        result.addAll(category.expenses);
+      }
+    }
+    result.sort((a, b) => b.madeAt.compareTo(a.madeAt));
+    expenses = result;
   }
+
+  Future<void> update(Expense expense) => _expenseRepository.update(expense);
+
+  Future<void> delete(Expense expense) => _expenseRepository.delete(expense);
 }

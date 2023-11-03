@@ -9,6 +9,7 @@ import 'features/app/app_module.dart';
 import 'features/app/app_page.dart';
 import 'features/budget_details/budget_details_module.dart';
 import 'features/budget_list/budget_list_module.dart';
+import 'features/category_details/category_details_module.dart';
 import 'features/expense_list/expense_list_module.dart';
 
 Future<void> main() async {
@@ -20,6 +21,7 @@ Future<void> main() async {
     AppModule(),
     BudgetListModule(),
     BudgetDetailsModule(),
+    CategoryDetailsModule(),
     ExpenseListModule(),
   ]);
   runApp(MainApp(router: GetIt.I()));
