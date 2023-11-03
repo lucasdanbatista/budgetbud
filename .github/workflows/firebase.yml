@@ -19,7 +19,7 @@ jobs:
           java-version: 17
 
       - name: Build apk
-        run: flutter build apk --profile
+        run: flutter build apk --release
 
       - name: Distribute artifacts
         uses: wzieba/Firebase-Distribution-Github-Action@v1
