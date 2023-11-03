@@ -37,44 +37,51 @@ class _BudgetListPageState extends State<BudgetListPage>
     super.build(context);
     return Scaffold(
       body: Observer(
-        builder: (context) => ListView.builder(
-          itemCount: widget.controller.budgets.length,
-          itemBuilder: (context, index) => BudgetListTile(
-            widget.controller.budgets[index],
-            onEditPressed: () async {
-              final result = await showModalBottomSheet<Budget>(
-                isScrollControlled: true,
-                constraints: BoxConstraints(
-                  maxHeight: MediaQuery.of(context).size.height * 0.7,
-                  minHeight: MediaQuery.of(context).size.height * 0.7,
+        builder: (context) => widget.controller.budgets.isEmpty
+            ? const Center(
+                child: Text('Não há orçamentos cadastrados.'),
+              )
+            : ListView.builder(
+                padding: const EdgeInsets.only(bottom: 96),
+                itemCount: widget.controller.budgets.length,
+                itemBuilder: (context, index) => BudgetListTile(
+                  widget.controller.budgets[index],
+                  onEditPressed: () async {
+                    final result = await showModalBottomSheet<Budget>(
+                      isScrollControlled: true,
+                      constraints: BoxConstraints(
+                        maxHeight: MediaQuery.of(context).size.height * 0.7,
+                        minHeight: MediaQuery.of(context).size.height * 0.7,
+                      ),
+                      context: context,
+                      builder: (context) => BudgetBottomSheet(
+                        budget: widget.controller.budgets[index],
+                        onDeletePressed: widget.controller.delete,
+                      ),
+                    );
+                    if (result != null) {
+                      await widget.controller.update(result);
+                    }
+                    widget.controller.fetch();
+                  },
+                  onDeletePressed: () async {
+                    Navigator.pop(context);
+                    await widget.controller
+                        .delete(widget.controller.budgets[index]);
+                    widget.controller.fetch();
+                  },
+                  onTap: () async {
+                    await context.pushRoute(
+                      BudgetDetailsRoute(
+                        controller: GetIt.I(
+                          param1: widget.controller.budgets[index],
+                        ),
+                      ),
+                    );
+                    widget.controller.fetch();
+                  },
                 ),
-                context: context,
-                builder: (context) => BudgetBottomSheet(
-                  budget: widget.controller.budgets[index],
-                ),
-              );
-              if (result != null) {
-                await widget.controller.update(result);
-              }
-              widget.controller.fetch();
-            },
-            onDeletePressed: () async {
-              Navigator.pop(context);
-              await widget.controller.delete(widget.controller.budgets[index]);
-              widget.controller.fetch();
-            },
-            onTap: () async {
-              await context.pushRoute(
-                BudgetDetailsRoute(
-                  controller: GetIt.I(
-                    param1: widget.controller.budgets[index],
-                  ),
-                ),
-              );
-              widget.controller.fetch();
-            },
-          ),
-        ),
+              ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {

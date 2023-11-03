@@ -8,11 +8,13 @@ import '../../../utils/masks/currency_mask.dart';
 class ExpenseBottomSheet extends StatefulWidget {
   final Category category;
   final Expense? expense;
+  final ValueChanged<Expense>? onDelete;
 
   const ExpenseBottomSheet({
     super.key,
     required this.category,
     this.expense,
+    this.onDelete,
   });
 
   @override
@@ -113,21 +115,7 @@ class _ExpenseBottomSheetState extends State<ExpenseBottomSheet> {
         ],
       ),
       persistentFooterAlignment: AlignmentDirectional.center,
-      persistentFooterButtons: [
-        TextButton(
-          onPressed: canSave
-              ? () {
-                  final result = widget.expense ?? Expense.lazy();
-                  result.category = widget.category;
-                  result.title = titleController.text.trim();
-                  result.value = valueMask.unmaskText(valueController.text);
-                  result.madeAt = madeAt!;
-                  Navigator.of(context).pop(result);
-                }
-              : null,
-          child: const Text('SALVAR'),
-        ),
-      ],
+      persistentFooterButtons: _persistentFooterButtons,
     );
   }
 
@@ -136,4 +124,55 @@ class _ExpenseBottomSheetState extends State<ExpenseBottomSheet> {
             valueController.text.trim().isNotEmpty &&
             madeAt != null;
       });
+
+  List<Widget> get _persistentFooterButtons {
+    final buttons = [
+      TextButton(
+        onPressed: canSave
+            ? () {
+                final result = widget.expense ?? Expense.lazy();
+                result.category = widget.category;
+                result.title = titleController.text.trim();
+                result.value = valueMask.unmaskText(valueController.text);
+                result.madeAt = madeAt!;
+                Navigator.of(context).pop(result);
+              }
+            : null,
+        child: const Text('SALVAR'),
+      ),
+    ];
+    if (widget.expense != null) {
+      buttons.insert(
+        0,
+        TextButton(
+          style: TextButton.styleFrom(
+            foregroundColor: Colors.red.shade300,
+          ),
+          onPressed: () => showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: const Text('Deletar despesa?'),
+              actions: [
+                TextButton(
+                  onPressed: () async {
+                    Navigator.of(context)
+                      ..pop()
+                      ..pop();
+                    widget.onDelete!(widget.expense!);
+                  },
+                  child: const Text('SIM'),
+                ),
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text('NÃO'),
+                ),
+              ],
+            ),
+          ),
+          child: const Text('DELETAR'),
+        ),
+      );
+    }
+    return buttons;
+  }
 }

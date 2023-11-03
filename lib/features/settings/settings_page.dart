@@ -25,6 +25,13 @@ class SettingsPage extends StatelessWidget {
               onChanged: controller.setDarkModeEnabled,
             ),
           ),
+          const SwitchListTile(
+            title: Text('Backup na nuvem'),
+            subtitle: Text('Disponível em breve'),
+            onChanged: null,
+            value: false,
+            secondary: Icon(LineIcons.cloud),
+          ),
         ],
       ),
     );
