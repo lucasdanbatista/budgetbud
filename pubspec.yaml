@@ -8,6 +8,7 @@ environment:
 
 dependencies:
   auto_route: ^7.8.4
+  easy_mask: ^2.0.1
   faker: ^2.1.0
   flutter:
     sdk: flutter

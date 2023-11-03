@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/entities/category.dart';
+import '../../../utils/masks/currency_mask.dart';
 import 'category_colors_bottom_sheet.dart';
 import 'category_icons_bottom_sheet.dart';
 
@@ -19,6 +20,7 @@ class CategoryBottomSheet extends StatefulWidget {
 class _CategoryBottomSheetState extends State<CategoryBottomSheet> {
   final titleController = TextEditingController();
   final budgetLimitController = TextEditingController();
+  final budgetLimitMask = CurrencyMask();
   late IconData icon;
   late Color color;
   late bool canSave;
@@ -28,7 +30,9 @@ class _CategoryBottomSheetState extends State<CategoryBottomSheet> {
     super.initState();
     if (widget.category != null) {
       titleController.text = widget.category!.title;
-      budgetLimitController.text = widget.category!.limit.toString();
+      budgetLimitController.text = budgetLimitMask.magicMask.getMaskedString(
+        widget.category!.limit.toString(),
+      );
     }
     icon = widget.category?.icon ?? Category.icons.values.first;
     color = widget.category?.color ?? Category.colors.first;
@@ -64,12 +68,15 @@ class _CategoryBottomSheetState extends State<CategoryBottomSheet> {
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
             child: TextFormField(
+              inputFormatters: [budgetLimitMask],
+              maxLength: 12,
               keyboardType: TextInputType.number,
               controller: budgetLimitController,
               onChanged: (_) => validate(),
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 hintText: 'Limite',
+                counter: SizedBox.shrink(),
               ),
             ),
           ),
@@ -107,8 +114,9 @@ class _CategoryBottomSheetState extends State<CategoryBottomSheet> {
               ? () {
                   final result = widget.category ?? Category.lazy();
                   result.title = titleController.text.trim();
-                  result.limit =
-                      double.parse(budgetLimitController.text.trim());
+                  result.limit = budgetLimitMask.unmask(
+                    budgetLimitController.text,
+                  );
                   result.icon = icon;
                   result.color = color;
                   Navigator.pop(context, result);
@@ -122,6 +130,6 @@ class _CategoryBottomSheetState extends State<CategoryBottomSheet> {
 
   void validate() => setState(
         () => canSave = titleController.text.trim().isNotEmpty &&
-            budgetLimitController.text.trim().isNotEmpty,
+            budgetLimitController.text.isNotEmpty,
       );
 }
