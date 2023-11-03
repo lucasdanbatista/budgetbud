@@ -31,44 +31,51 @@ class BudgetListPage extends StatelessWidget with InitStateMixin {
       body: Observer(
         builder: (context) => ListView.builder(
           itemCount: controller.budgets.length,
-          itemBuilder: (context, index) {
-            final budget = controller.budgets[index];
-            return BudgetListTile(
-              budget,
-              onEditPressed: () async {
-                final result = await showModalBottomSheet(
-                  context: context,
-                  builder: (context) => BudgetBottomSheet(
-                    budget: budget,
+          itemBuilder: (context, index) => BudgetListTile(
+            controller.budgets[index],
+            onEditPressed: () async {
+              final result = await showModalBottomSheet<Budget>(
+                isScrollControlled: true,
+                constraints: BoxConstraints(
+                  maxHeight: MediaQuery.of(context).size.height * 0.7,
+                  minHeight: MediaQuery.of(context).size.height * 0.7,
+                ),
+                context: context,
+                builder: (context) => BudgetBottomSheet(
+                  budget: controller.budgets[index],
+                ),
+              );
+              if (result != null) {
+                await controller.update(result);
+              }
+              controller.fetch();
+            },
+            onDeletePressed: () async {
+              Navigator.pop(context);
+              await controller.delete(controller.budgets[index]);
+              controller.fetch();
+            },
+            onTap: () async {
+              await context.pushRoute(
+                BudgetDetailsRoute(
+                  controller: GetIt.I(
+                    param1: controller.budgets[index],
                   ),
-                );
-                if (result != null) {
-                  await controller.update(budget);
-                }
-                controller.fetch();
-              },
-              onDeletePressed: () async {
-                Navigator.pop(context);
-                await controller.delete(budget);
-                controller.fetch();
-              },
-              onTap: () async {
-                await context.pushRoute(
-                  BudgetDetailsRoute(
-                    controller: GetIt.I(
-                      param1: budget,
-                    ),
-                  ),
-                );
-                controller.fetch();
-              },
-            );
-          },
+                ),
+              );
+              controller.fetch();
+            },
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           final budget = await showModalBottomSheet<Budget>(
+            isScrollControlled: true,
+            constraints: BoxConstraints(
+              maxHeight: MediaQuery.of(context).size.height * 0.7,
+              minHeight: MediaQuery.of(context).size.height * 0.7,
+            ),
             context: context,
             builder: (context) => const BudgetBottomSheet(),
           );

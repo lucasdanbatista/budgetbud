@@ -49,6 +49,13 @@ class ExpenseListPage extends StatelessWidget with InitStateMixin {
                       PopupMenuItem(
                         onTap: () async {
                           final result = await showModalBottomSheet<Expense>(
+                            isScrollControlled: true,
+                            constraints: BoxConstraints(
+                              maxHeight:
+                                  MediaQuery.of(context).size.height * 0.7,
+                              minHeight:
+                                  MediaQuery.of(context).size.height * 0.7,
+                            ),
                             context: context,
                             builder: (context) => ExpenseBottomSheet(
                               category: expense.category,
@@ -96,6 +103,11 @@ class ExpenseListPage extends StatelessWidget with InitStateMixin {
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           final expense = await showModalBottomSheet<Expense>(
+            isScrollControlled: true,
+            constraints: BoxConstraints(
+              maxHeight: MediaQuery.of(context).size.height * 0.7,
+              minHeight: MediaQuery.of(context).size.height * 0.7,
+            ),
             context: context,
             builder: (context) => ExpenseBottomSheet(
               category: controller.category,
