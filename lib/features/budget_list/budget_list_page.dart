@@ -8,6 +8,7 @@ import '../../utils/mixins/init_state_mixin.dart';
 import '../app/app_router.gr.dart';
 import 'budget_list_controller.dart';
 import 'widgets/budget_bottom_sheet.dart';
+import 'widgets/budget_list_tile.dart';
 
 @RoutePage()
 class BudgetListPage extends StatelessWidget with InitStateMixin {
@@ -32,55 +33,31 @@ class BudgetListPage extends StatelessWidget with InitStateMixin {
           itemCount: controller.budgets.length,
           itemBuilder: (context, index) {
             final budget = controller.budgets[index];
-            return ListTile(
-              title: Text(budget.title),
-              trailing: PopupMenuButton(
-                itemBuilder: (context) => [
-                  PopupMenuItem(
-                    onTap: () async {
-                      final result = await showModalBottomSheet(
-                        context: context,
-                        builder: (context) => BudgetBottomSheet(
-                          budget: budget,
-                        ),
-                      );
-                      if (result != null) {
-                        await controller.update(budget);
-                      }
-                      controller.fetch();
-                    },
-                    child: const Text('Editar'),
+            return BudgetListTile(
+              budget,
+              onEditPressed: () async {
+                final result = await showModalBottomSheet(
+                  context: context,
+                  builder: (context) => BudgetBottomSheet(
+                    budget: budget,
                   ),
-                  PopupMenuItem(
-                    onTap: () => showDialog(
-                      context: context,
-                      builder: (context) => AlertDialog(
-                        title: const Text('Deletar orçamento?'),
-                        actions: [
-                          TextButton(
-                            onPressed: () async {
-                              Navigator.pop(context);
-                              await controller.delete(budget);
-                              controller.fetch();
-                            },
-                            child: const Text('SIM'),
-                          ),
-                          TextButton(
-                            onPressed: () => Navigator.pop(context),
-                            child: const Text('NÃO'),
-                          ),
-                        ],
-                      ),
-                    ),
-                    child: const Text('Deletar'),
-                  ),
-                ],
-              ),
+                );
+                if (result != null) {
+                  await controller.update(budget);
+                }
+                controller.fetch();
+              },
+              onDeletePressed: () async {
+                Navigator.pop(context);
+                await controller.delete(budget);
+                controller.fetch();
+              },
               onTap: () async {
                 await context.pushRoute(
                   BudgetDetailsRoute(
-                    budget: budget,
-                    controller: GetIt.I(),
+                    controller: GetIt.I(
+                      param1: budget,
+                    ),
                   ),
                 );
                 controller.fetch();

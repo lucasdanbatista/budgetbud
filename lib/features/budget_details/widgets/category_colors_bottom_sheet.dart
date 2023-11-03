@@ -18,17 +18,23 @@ class CategoryColorsBottomSheet extends StatelessWidget {
         ),
       ),
       body: GridView.count(
-        crossAxisCount: 6,
+        padding: const EdgeInsets.all(12),
+        crossAxisCount: 7,
+        mainAxisSpacing: 8,
+        crossAxisSpacing: 8,
         children: Category.colors
             .map(
-              (e) => IconButton(
-                icon: Container(
+              (e) => InkWell(
+                borderRadius: const BorderRadius.all(Radius.circular(100)),
+                child: Ink(
+                  height: 24,
+                  width: 24,
                   decoration: BoxDecoration(
                     color: e,
                     shape: BoxShape.circle,
                   ),
                 ),
-                onPressed: () => Navigator.pop(context, e),
+                onTap: () => Navigator.pop(context, e),
               ),
             )
             .toList(),

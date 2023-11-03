@@ -1,4 +1,5 @@
 import '../../utils/extensions/date_time.dart';
+import 'category.dart';
 import 'entity.dart';
 
 class Budget extends Entity {
@@ -6,6 +7,7 @@ class Budget extends Entity {
   late String title;
   DateTime? _startAt;
   DateTime? _endAt;
+  late final List<Category> categories;
 
   Budget.lazy({
     String? id,
@@ -44,5 +46,21 @@ class Budget extends Entity {
   set endAt(DateTime value) {
     if (_startAt != null) assert(value >= _startAt!);
     _endAt = value;
+  }
+
+  double get utilized {
+    var sum = 0.0;
+    for (final category in categories) {
+      sum += category.utilized;
+    }
+    return sum;
+  }
+
+  double get limit {
+    var sum = 0.0;
+    for (final category in categories) {
+      sum += category.limit;
+    }
+    return sum;
   }
 }

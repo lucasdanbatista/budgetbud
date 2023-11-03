@@ -36,7 +36,7 @@ class ExpenseListPage extends StatelessWidget with InitStateMixin {
           itemBuilder: (context, index) {
             final expense = controller.expenses[index];
             return ListTile(
-              contentPadding: const EdgeInsets.fromLTRB(16, 0, 4, 0),
+              contentPadding: const EdgeInsets.only(left: 16, right: 4),
               title: Text(expense.title),
               leading: const Icon(Icons.attach_money_outlined),
               subtitle: Text(DateFormat.yMd().format(expense.madeAt)),

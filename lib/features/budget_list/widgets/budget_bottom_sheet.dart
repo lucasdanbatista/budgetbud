@@ -72,7 +72,7 @@ class _BudgetBottomSheetState extends State<BudgetBottomSheet> {
                     final date = await showDatePicker(
                       context: context,
                       initialDate: startAt ?? DateTime.now(),
-                      firstDate: DateTime.now(),
+                      firstDate: DateTime.now().subtract(365.days),
                       lastDate: DateTime.now().add(365.days),
                     );
                     if (date != null) {

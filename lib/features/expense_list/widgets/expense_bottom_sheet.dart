@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 
 import '../../../core/entities/category.dart';
 import '../../../core/entities/expense.dart';
+import '../../../utils/masks/currency_mask.dart';
 
 class ExpenseBottomSheet extends StatefulWidget {
   final Category category;
@@ -22,6 +23,7 @@ class _ExpenseBottomSheetState extends State<ExpenseBottomSheet> {
   final titleController = TextEditingController();
   final valueController = TextEditingController();
   final madeAtController = TextEditingController();
+  final valueMask = CurrencyMask();
   DateTime? madeAt;
   late bool canSave;
 
@@ -30,7 +32,9 @@ class _ExpenseBottomSheetState extends State<ExpenseBottomSheet> {
     super.initState();
     if (widget.expense != null) {
       titleController.text = widget.expense!.title;
-      valueController.text = widget.expense!.value.toString();
+      valueController.text = valueMask.magicMask.getMaskedString(
+        widget.expense!.value.toString(),
+      );
       madeAtController.text = DateFormat.yMd().format(widget.expense!.madeAt);
       madeAt = widget.expense!.madeAt;
     }
@@ -66,12 +70,15 @@ class _ExpenseBottomSheetState extends State<ExpenseBottomSheet> {
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 12),
                   child: TextFormField(
+                    maxLength: 12,
+                    inputFormatters: [valueMask],
                     controller: valueController,
                     onChanged: (_) => validate(),
                     keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(),
                       hintText: 'Valor',
+                      counter: SizedBox.shrink(),
                     ),
                   ),
                 ),
@@ -115,7 +122,7 @@ class _ExpenseBottomSheetState extends State<ExpenseBottomSheet> {
                   final result = widget.expense ?? Expense.lazy();
                   result.category = widget.category;
                   result.title = titleController.text.trim();
-                  result.value = double.parse(valueController.text.trim());
+                  result.value = valueMask.unmask(valueController.text);
                   result.madeAt = madeAt!;
                   Navigator.of(context).pop(result);
                 }

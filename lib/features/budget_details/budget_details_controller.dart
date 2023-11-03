@@ -2,9 +2,8 @@ import 'package:mobx/mobx.dart';
 
 import '../../core/entities/budget.dart';
 import '../../core/entities/category.dart';
-import '../../core/entities/expense.dart';
+import '../../core/repositories/budget_repository.dart';
 import '../../core/repositories/category_repository.dart';
-import '../../core/repositories/expense_repository.dart';
 
 part 'budget_details_controller.g.dart';
 
@@ -12,31 +11,21 @@ class BudgetDetailsController = BudgetDetailsControllerBase
     with _$BudgetDetailsController;
 
 abstract class BudgetDetailsControllerBase with Store {
+  final BudgetRepository _repository;
   final CategoryRepository _categoryRepository;
-  final ExpenseRepository _expenseRepository;
-
-  @observable
-  ObservableList<Expense> expenses = ObservableList();
 
   BudgetDetailsControllerBase(
+    this.budget,
+    this._repository,
     this._categoryRepository,
-    this._expenseRepository,
   );
 
   @observable
-  ObservableList<Category> categories = ObservableList();
+  Budget budget;
 
   @action
-  Future<void> fetch(Budget budget) async {
-    expenses.clear();
-    categories = ObservableList.of(
-      await _categoryRepository.findAll(budget),
-    );
-    for (final category in categories) {
-      expenses.addAll(
-        await _expenseRepository.findAll(category),
-      );
-    }
+  Future<void> fetch() async {
+    budget = await _repository.findById(budget.id);
   }
 
   Future<void> createCategory(Category category) =>
@@ -47,36 +36,4 @@ abstract class BudgetDetailsControllerBase with Store {
 
   Future<void> updateCategory(Category category) =>
       _categoryRepository.update(category);
-
-  double utilizeValueOf(Category category) {
-    final expenses = this.expenses.where((e) => e.category.id == category.id);
-    var sum = 0.0;
-    for (final expense in expenses) {
-      sum += expense.value;
-    }
-    return sum;
-  }
-
-  double utilizedPercentageOf(Category category) {
-    if (category.budgetLimit == 0) return 0;
-    return utilizeValueOf(category) / category.budgetLimit;
-  }
-
-  @computed
-  double get totalUtilized {
-    var sum = 0.0;
-    for (final expense in expenses) {
-      sum += expense.value;
-    }
-    return sum;
-  }
-
-  @computed
-  double get totalBudgetLimit {
-    var sum = 0.0;
-    for (final category in categories) {
-      sum += category.budgetLimit;
-    }
-    return sum;
-  }
 }
