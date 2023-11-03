@@ -39,6 +39,11 @@ class BudgetDetailsPage extends StatelessWidget {
                 category,
                 onEditPressed: () async {
                   final result = await showModalBottomSheet<Category>(
+                    isScrollControlled: true,
+                    constraints: BoxConstraints(
+                      maxHeight: MediaQuery.of(context).size.height * 0.7,
+                      minHeight: MediaQuery.of(context).size.height * 0.7,
+                    ),
                     context: context,
                     builder: (context) => CategoryBottomSheet(
                       category: category,
@@ -85,6 +90,11 @@ class BudgetDetailsPage extends StatelessWidget {
           floatingActionButton: FloatingActionButton(
             onPressed: () async {
               final category = await showModalBottomSheet<Category>(
+                isScrollControlled: true,
+                constraints: BoxConstraints(
+                  maxHeight: MediaQuery.of(context).size.height * 0.7,
+                  minHeight: MediaQuery.of(context).size.height * 0.7,
+                ),
                 context: context,
                 builder: (context) => const CategoryBottomSheet(),
               );
