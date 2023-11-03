@@ -13,6 +13,7 @@ import 'module.dart';
 import 'repositories/budget_repository.dart';
 import 'repositories/category_repository.dart';
 import 'repositories/expense_repository.dart';
+import 'repositories/settings_repository.dart';
 
 class CoreModule extends Module {
   @override
@@ -45,5 +46,6 @@ class CoreModule extends Module {
     GetIt.I.registerLazySingleton(
       () => ExpenseRepository(GetIt.I(), GetIt.I()),
     );
+    GetIt.I.registerLazySingleton(() => SettingsRepository());
   }
 }

@@ -6,6 +6,6 @@ import 'budget_list_controller.dart';
 class BudgetListModule extends Module {
   @override
   Future<void> init() async {
-    GetIt.I.registerFactory(() => BudgetListController(GetIt.I()));
+    GetIt.I.registerLazySingleton(() => BudgetListController(GetIt.I()));
   }
 }

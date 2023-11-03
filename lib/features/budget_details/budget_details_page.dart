@@ -76,7 +76,7 @@ class BudgetDetailsPage extends StatelessWidget {
                 ),
                 onTap: () async {
                   await context.pushRoute(
-                    ExpenseListRoute(
+                    CategoryDetailsRoute(
                       controller: GetIt.I(
                         param1: category,
                       ),

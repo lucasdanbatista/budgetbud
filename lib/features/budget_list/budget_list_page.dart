@@ -4,35 +4,43 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../core/entities/budget.dart';
-import '../../utils/mixins/init_state_mixin.dart';
 import '../app/app_router.gr.dart';
 import 'budget_list_controller.dart';
 import 'widgets/budget_bottom_sheet.dart';
 import 'widgets/budget_list_tile.dart';
 
-@RoutePage()
-class BudgetListPage extends StatelessWidget with InitStateMixin {
-  final controller = GetIt.I<BudgetListController>();
+class BudgetListPage extends StatefulWidget {
+  final BudgetListController controller;
 
-  BudgetListPage({super.key});
+  const BudgetListPage({
+    super.key,
+    required this.controller,
+  });
 
   @override
-  Future<void> initState() async {
-    await controller.fetch();
+  State<BudgetListPage> createState() => _BudgetListPageState();
+}
+
+class _BudgetListPageState extends State<BudgetListPage>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  void initState() {
+    super.initState();
+    widget.controller.fetch();
   }
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Orçamentos'),
-      ),
       body: Observer(
         builder: (context) => ListView.builder(
-          itemCount: controller.budgets.length,
+          itemCount: widget.controller.budgets.length,
           itemBuilder: (context, index) => BudgetListTile(
-            controller.budgets[index],
+            widget.controller.budgets[index],
             onEditPressed: () async {
               final result = await showModalBottomSheet<Budget>(
                 isScrollControlled: true,
@@ -42,28 +50,28 @@ class BudgetListPage extends StatelessWidget with InitStateMixin {
                 ),
                 context: context,
                 builder: (context) => BudgetBottomSheet(
-                  budget: controller.budgets[index],
+                  budget: widget.controller.budgets[index],
                 ),
               );
               if (result != null) {
-                await controller.update(result);
+                await widget.controller.update(result);
               }
-              controller.fetch();
+              widget.controller.fetch();
             },
             onDeletePressed: () async {
               Navigator.pop(context);
-              await controller.delete(controller.budgets[index]);
-              controller.fetch();
+              await widget.controller.delete(widget.controller.budgets[index]);
+              widget.controller.fetch();
             },
             onTap: () async {
               await context.pushRoute(
                 BudgetDetailsRoute(
                   controller: GetIt.I(
-                    param1: controller.budgets[index],
+                    param1: widget.controller.budgets[index],
                   ),
                 ),
               );
-              controller.fetch();
+              widget.controller.fetch();
             },
           ),
         ),
@@ -80,8 +88,8 @@ class BudgetListPage extends StatelessWidget with InitStateMixin {
             builder: (context) => const BudgetBottomSheet(),
           );
           if (budget != null) {
-            await controller.create(budget);
-            controller.fetch();
+            await widget.controller.create(budget);
+            widget.controller.fetch();
           }
         },
         child: const Icon(Icons.add),
