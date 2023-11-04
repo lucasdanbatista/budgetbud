@@ -47,12 +47,23 @@ class ExpenseListTile extends StatelessWidget {
           onUpdate(result);
         }
       },
-      trailing: Text(
-        CurrencyFormatter().format(expense.value),
-        style: Theme.of(context)
-            .textTheme
-            .bodySmall
-            ?.copyWith(fontWeight: FontWeight.w500),
+      trailing: Wrap(
+        direction: Axis.horizontal,
+        crossAxisAlignment: WrapCrossAlignment.center,
+        spacing: 12,
+        children: [
+          Text(
+            CurrencyFormatter().format(expense.value),
+            style: Theme.of(context)
+                .textTheme
+                .bodySmall
+                ?.copyWith(fontWeight: FontWeight.w500),
+          ),
+          Visibility(
+            visible: expense.isPending,
+            child: const Badge(smallSize: 8),
+          ),
+        ],
       ),
     );
   }

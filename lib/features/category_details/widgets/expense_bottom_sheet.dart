@@ -26,6 +26,7 @@ class _ExpenseBottomSheetState extends State<ExpenseBottomSheet> {
   final valueController = TextEditingController();
   final madeAtController = TextEditingController();
   final valueMask = CurrencyMask();
+  var isPending = false;
   DateTime? madeAt;
   late bool canSave;
 
@@ -37,6 +38,7 @@ class _ExpenseBottomSheetState extends State<ExpenseBottomSheet> {
       valueController.text = valueMask.maskValue(widget.expense!.value);
       madeAtController.text = DateFormat.yMd().format(widget.expense!.madeAt);
       madeAt = widget.expense!.madeAt;
+      isPending = widget.expense!.isPending;
     }
     validate();
   }
@@ -67,21 +69,20 @@ class _ExpenseBottomSheetState extends State<ExpenseBottomSheet> {
                     hintText: 'Título',
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 12),
-                  child: TextFormField(
-                    maxLength: 9,
-                    inputFormatters: [valueMask],
-                    controller: valueController,
-                    onChanged: (_) => validate(),
-                    keyboardType: TextInputType.number,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      hintText: 'Valor',
-                      counter: SizedBox.shrink(),
-                    ),
+                const Padding(padding: EdgeInsets.only(top: 12)),
+                TextFormField(
+                  maxLength: 9,
+                  inputFormatters: [valueMask],
+                  controller: valueController,
+                  onChanged: (_) => validate(),
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    hintText: 'Valor',
+                    counter: SizedBox.shrink(),
                   ),
                 ),
+                const Padding(padding: EdgeInsets.only(top: 4)),
                 TextFormField(
                   controller: madeAtController,
                   readOnly: true,
@@ -112,6 +113,11 @@ class _ExpenseBottomSheetState extends State<ExpenseBottomSheet> {
               ],
             ),
           ),
+          SwitchListTile(
+            value: isPending,
+            onChanged: (value) => setState(() => isPending = value),
+            title: const Text('Despensa pendente'),
+          ),
         ],
       ),
       persistentFooterAlignment: AlignmentDirectional.center,
@@ -135,6 +141,7 @@ class _ExpenseBottomSheetState extends State<ExpenseBottomSheet> {
                 result.title = titleController.text.trim();
                 result.value = valueMask.unmaskText(valueController.text);
                 result.madeAt = madeAt!;
+                result.isPending = isPending;
                 Navigator.of(context).pop(result);
               }
             : null,

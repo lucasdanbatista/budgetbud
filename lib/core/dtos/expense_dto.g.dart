@@ -12,6 +12,7 @@ ExpenseDTO _$ExpenseDTOFromJson(Map<String, dynamic> json) => ExpenseDTO(
       title: json['title'] as String,
       value: (json['value'] as num).toDouble(),
       madeAt: DateTime.parse(json['madeAt'] as String),
+      isPending: json['isPending'] as int,
     );
 
 Map<String, dynamic> _$ExpenseDTOToJson(ExpenseDTO instance) =>
@@ -21,4 +22,5 @@ Map<String, dynamic> _$ExpenseDTOToJson(ExpenseDTO instance) =>
       'title': instance.title,
       'value': instance.value,
       'madeAt': instance.madeAt.toIso8601String(),
+      'isPending': instance.isPending,
     };

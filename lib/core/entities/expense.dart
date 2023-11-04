@@ -7,6 +7,7 @@ class Expense extends Entity {
   late String title;
   late double value;
   late DateTime madeAt;
+  late bool isPending;
 
   Expense.lazy({
     String? id,
@@ -14,12 +15,14 @@ class Expense extends Entity {
     String? title,
     double? value,
     DateTime? madeAt,
+    bool? isPending,
   }) {
     if (id != null) this.id = id;
     if (category != null) this.category = category;
     if (title != null) this.title = title;
     if (value != null) this.value = value;
     if (madeAt != null) this.madeAt = madeAt;
+    if (isPending != null) this.isPending = isPending;
   }
 
   factory Expense({
@@ -28,6 +31,7 @@ class Expense extends Entity {
     required String title,
     required double value,
     required DateTime madeAt,
+    required bool isPending,
   }) =>
       Expense.lazy(
         id: id,
@@ -35,5 +39,6 @@ class Expense extends Entity {
         title: title,
         value: value,
         madeAt: madeAt,
+        isPending: isPending,
       );
 }

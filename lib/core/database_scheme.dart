@@ -3,11 +3,16 @@ abstract interface class DatabaseScheme {
   static const globalConfigurations = 'pragma foreign_keys = on;';
 
   factory DatabaseScheme(int version) => switch (version) {
-        1 => _DatabaseSchemeV1(),
+        1 => DatabaseScheme.v1(),
+        2 => DatabaseScheme.v2(),
         _ => throw UnsupportedError(
             'database version $version is not supported.',
           ),
       };
+
+  factory DatabaseScheme.v1() = _DatabaseSchemeV1;
+
+  factory DatabaseScheme.v2() = _DatabaseSchemeV2;
 
   List<String> get tables;
 }
@@ -43,4 +48,14 @@ class _DatabaseSchemeV1 implements DatabaseScheme {
           );
         ''',
       ];
+}
+
+class _DatabaseSchemeV2 implements DatabaseScheme {
+  @override
+  final tables = [
+    '''
+      alter table Expense
+        add isPending bool not null default false;
+    ''',
+  ];
 }

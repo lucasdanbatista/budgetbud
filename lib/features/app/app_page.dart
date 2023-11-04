@@ -26,6 +26,9 @@ class MainApp extends StatelessWidget {
                 : Brightness.light,
             seedColor: Colors.green,
           ),
+          badgeTheme: const BadgeThemeData(
+            backgroundColor: Colors.green,
+          ),
           useMaterial3: true,
           appBarTheme: const AppBarTheme(
             centerTitle: true,
