@@ -11,6 +11,7 @@ class ExpenseMapper implements DTOMapper<Expense, ExpenseDTO> {
       title: it.title,
       value: it.value,
       madeAt: it.madeAt,
+      isPending: it.isPending == 1,
     );
   }
 
@@ -22,6 +23,7 @@ class ExpenseMapper implements DTOMapper<Expense, ExpenseDTO> {
       title: it.title,
       value: it.value,
       madeAt: it.madeAt,
+      isPending: it.isPending ? 1 : 0,
     );
   }
 }

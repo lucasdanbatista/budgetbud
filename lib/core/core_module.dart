@@ -20,10 +20,20 @@ class CoreModule extends Module {
   Future<void> init() async {
     final database = await openDatabase(
       DatabaseScheme.databaseName,
-      version: 1,
+      version: 2,
       onConfigure: (db) => db.execute(DatabaseScheme.globalConfigurations),
+      onUpgrade: (db, oldVersion, newVersion) async {
+        var version = oldVersion;
+        while (version != newVersion) {
+          version++;
+          final scheme = DatabaseScheme(version);
+          for (final table in scheme.tables) {
+            await db.execute(table);
+          }
+        }
+      },
       onCreate: (db, version) async {
-        final scheme = DatabaseScheme(version);
+        final scheme = DatabaseScheme.v1();
         for (final table in scheme.tables) {
           await db.execute(table);
         }

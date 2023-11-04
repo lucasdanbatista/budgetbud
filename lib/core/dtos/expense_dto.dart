@@ -11,6 +11,7 @@ class ExpenseDTO extends DTO {
   final String title;
   final double value;
   final DateTime madeAt;
+  final int isPending;
 
   ExpenseDTO({
     required this.id,
@@ -18,6 +19,7 @@ class ExpenseDTO extends DTO {
     required this.title,
     required this.value,
     required this.madeAt,
+    required this.isPending,
   });
 
   factory ExpenseDTO.fromJson(Map<String, dynamic> json) =>
