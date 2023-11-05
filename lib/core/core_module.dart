@@ -18,23 +18,19 @@ import 'repositories/settings_repository.dart';
 class CoreModule extends Module {
   @override
   Future<void> init() async {
+    final latestScheme = DatabaseScheme.latest();
     final database = await openDatabase(
       DatabaseScheme.databaseName,
-      version: 2,
+      version: latestScheme.version,
       onConfigure: (db) => db.execute(DatabaseScheme.globalConfigurations),
       onUpgrade: (db, oldVersion, newVersion) async {
-        var version = oldVersion;
-        while (version != newVersion) {
-          version++;
-          final scheme = DatabaseScheme(version);
-          for (final table in scheme.tables) {
-            await db.execute(table);
-          }
+        final scheme = DatabaseScheme.migrate(oldVersion, newVersion);
+        for (final table in scheme.tables) {
+          await db.execute(table);
         }
       },
       onCreate: (db, version) async {
-        final scheme = DatabaseScheme.v1();
-        for (final table in scheme.tables) {
+        for (final table in latestScheme.tables) {
           await db.execute(table);
         }
       },
