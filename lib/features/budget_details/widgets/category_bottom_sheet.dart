@@ -102,13 +102,17 @@ class _CategoryBottomSheetState extends State<CategoryBottomSheet> {
                 context: context,
                 builder: (context) => const CategoryIconsBottomSheet(),
               );
-              if (icon != null) setState(() => this.icon = icon);
-              if (!context.mounted) return;
-              final color = await showModalBottomSheet<Color>(
-                context: context,
-                builder: (context) => const CategoryColorsBottomSheet(),
-              );
-              if (color != null) setState(() => this.color = color);
+              if (icon != null) {
+                setState(() => this.icon = icon);
+                if (!context.mounted) return;
+                final color = await showModalBottomSheet<Color>(
+                  context: context,
+                  builder: (context) => const CategoryColorsBottomSheet(),
+                );
+                if (color != null) {
+                  setState(() => this.color = color);
+                }
+              }
             },
           ),
         ],
