@@ -18,6 +18,7 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return Observer(
       builder: (context) => MaterialApp.router(
+        debugShowCheckedModeBanner: false,
         title: 'BudgetBud',
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(
