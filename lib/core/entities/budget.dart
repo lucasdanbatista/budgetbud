@@ -5,6 +5,7 @@ import 'entity.dart';
 class Budget extends Entity {
   late final String id;
   late String title;
+  late double limit;
   DateTime? _startAt;
   DateTime? _endAt;
   late final List<Category> categories;
@@ -12,11 +13,13 @@ class Budget extends Entity {
   Budget.lazy({
     String? id,
     String? title,
+    double? limit,
     DateTime? startAt,
     DateTime? endAt,
   }) {
     if (id != null) this.id = id;
     if (title != null) this.title = title;
+    if (limit != null) this.limit = limit;
     if (startAt != null) this.startAt = startAt;
     if (endAt != null) this.endAt = endAt;
   }
@@ -24,12 +27,14 @@ class Budget extends Entity {
   factory Budget({
     required String id,
     required String title,
+    required double limit,
     required DateTime startAt,
     required DateTime endAt,
   }) =>
       Budget.lazy(
         id: id,
         title: title,
+        limit: limit,
         startAt: startAt,
         endAt: endAt,
       );
@@ -52,14 +57,6 @@ class Budget extends Entity {
     var sum = 0.0;
     for (final category in categories) {
       sum += category.utilized;
-    }
-    return sum;
-  }
-
-  double get limit {
-    var sum = 0.0;
-    for (final category in categories) {
-      sum += category.limit;
     }
     return sum;
   }

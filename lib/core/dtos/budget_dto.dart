@@ -7,13 +7,20 @@ part 'budget_dto.g.dart';
 @JsonSerializable()
 class BudgetDTO extends DTO {
   final String id;
+
   final String title;
+
+  @JsonKey(name: 'budgetLimit')
+  final double limit;
+
   final DateTime startAt;
+
   final DateTime endAt;
 
   BudgetDTO({
     required this.id,
     required this.title,
+    required this.limit,
     required this.startAt,
     required this.endAt,
   });

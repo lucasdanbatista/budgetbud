@@ -10,7 +10,7 @@ CategoryDTO _$CategoryDTOFromJson(Map<String, dynamic> json) => CategoryDTO(
       id: json['id'] as String,
       budgetId: json['budgetId'] as String,
       title: json['title'] as String,
-      budgetLimit: (json['budgetLimit'] as num).toDouble(),
+      limit: (json['categoryLimit'] as num).toDouble(),
       iconName: json['iconName'] as String,
       backgroundColor: json['backgroundColor'] as String,
     );
@@ -20,7 +20,7 @@ Map<String, dynamic> _$CategoryDTOToJson(CategoryDTO instance) =>
       'id': instance.id,
       'budgetId': instance.budgetId,
       'title': instance.title,
-      'budgetLimit': instance.budgetLimit,
+      'categoryLimit': instance.limit,
       'iconName': instance.iconName,
       'backgroundColor': instance.backgroundColor,
     };

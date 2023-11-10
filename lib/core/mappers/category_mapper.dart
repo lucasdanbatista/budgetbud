@@ -17,7 +17,7 @@ class CategoryMapper implements DTOMapper<Category, CategoryDTO> {
       id: it.id,
       budget: budget,
       title: it.title,
-      budgetLimit: it.budgetLimit,
+      budgetLimit: it.limit,
       icon: Category.icons[it.iconName] ?? Icons.more_horiz_outlined,
       color: _colorMapper.mapToColor(it.backgroundColor),
     );
@@ -31,7 +31,7 @@ class CategoryMapper implements DTOMapper<Category, CategoryDTO> {
       id: it.id,
       budgetId: it.budget.id,
       title: it.title,
-      budgetLimit: it.limit,
+      limit: it.limit,
       iconName: Category.getIconName(it.icon),
       backgroundColor: _colorMapper.mapToString(it.color),
     );

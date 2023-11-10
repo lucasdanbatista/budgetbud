@@ -9,6 +9,7 @@ part of 'budget_dto.dart';
 BudgetDTO _$BudgetDTOFromJson(Map<String, dynamic> json) => BudgetDTO(
       id: json['id'] as String,
       title: json['title'] as String,
+      limit: (json['budgetLimit'] as num).toDouble(),
       startAt: DateTime.parse(json['startAt'] as String),
       endAt: DateTime.parse(json['endAt'] as String),
     );
@@ -16,6 +17,7 @@ BudgetDTO _$BudgetDTOFromJson(Map<String, dynamic> json) => BudgetDTO(
 Map<String, dynamic> _$BudgetDTOToJson(BudgetDTO instance) => <String, dynamic>{
       'id': instance.id,
       'title': instance.title,
+      'budgetLimit': instance.limit,
       'startAt': instance.startAt.toIso8601String(),
       'endAt': instance.endAt.toIso8601String(),
     };

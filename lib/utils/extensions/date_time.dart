@@ -12,4 +12,6 @@ extension DateTimeExtension on DateTime {
   bool isSameDay(DateTime other) => DateUtils.isSameDay(this, other);
 
   DateTime get dateOnly => DateUtils.dateOnly(this);
+
+  bool isAtSameDay(DateTime other) => DateUtils.isSameDay(this, other);
 }
