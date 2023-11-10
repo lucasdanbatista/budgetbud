@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 
 import '../core/entities/expense.dart';
 import '../utils/extensions/date_time.dart';
+import '../utils/extensions/int.dart';
 import 'expense_list_tile.dart';
 
 class ExpenseListView extends StatelessWidget {
@@ -66,7 +67,13 @@ class _Section extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.all(20),
           child: Text(
-            DateFormat.yMd().format(date),
+            date.isAtSameDay(DateTime.now().add(1.days))
+                ? 'Amanhã'
+                : date.isAtSameDay(DateTime.now())
+                    ? 'Hoje'
+                    : date.isAtSameDay(DateTime.now().subtract(1.days))
+                        ? 'Ontem'
+                        : DateFormat.yMEd().format(date),
             style: Theme.of(context).textTheme.titleLarge,
           ),
         ),

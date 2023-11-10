@@ -14,6 +14,7 @@ class BudgetMapper
     final budget = Budget(
       id: it.id,
       title: it.title,
+      limit: it.limit,
       startAt: it.startAt,
       endAt: it.endAt,
     );
@@ -26,6 +27,7 @@ class BudgetMapper
     return BudgetDTO(
       id: it.id,
       title: it.title,
+      limit: it.limit,
       startAt: it.startAt,
       endAt: it.endAt,
     );

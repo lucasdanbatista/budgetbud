@@ -6,6 +6,7 @@ abstract interface class DatabaseScheme {
   static final _schemes = [
     _DatabaseSchemeV1(),
     _DatabaseSchemeV2(),
+    _DatabaseSchemeV3(),
   ];
 
   factory DatabaseScheme(int version) =>
@@ -101,6 +102,23 @@ class _DatabaseSchemeV2 implements DatabaseScheme {
     '''
       alter table Expense
         add isPending bool not null default false;
+    ''',
+  ];
+}
+
+class _DatabaseSchemeV3 implements DatabaseScheme {
+  @override
+  final version = 3;
+
+  @override
+  final tables = [
+    '''
+      alter table Budget
+        add budgetLimit real not null default 0;
+    ''',
+    '''
+      alter table Category
+        rename column budgetLimit to categoryLimit;
     ''',
   ];
 }
