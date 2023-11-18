@@ -17,34 +17,43 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Observer(
-      builder: (context) => MaterialApp.router(
-        debugShowCheckedModeBanner: false,
-        title: 'BudgetBud',
-        localizationsDelegates: const [
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
-        supportedLocales: const [
-          Locale('pt', 'BR'),
-        ],
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(
-            brightness: settingsController.isDarkModeEnabled
-                ? Brightness.dark
-                : Brightness.light,
-            seedColor: Colors.green,
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: () {
+        final focus = FocusScope.of(context);
+        if (!focus.hasPrimaryFocus && focus.focusedChild != null) {
+          FocusManager.instance.primaryFocus?.unfocus();
+        }
+      },
+      child: Observer(
+        builder: (context) => MaterialApp.router(
+          debugShowCheckedModeBanner: false,
+          title: 'BudgetBud',
+          localizationsDelegates: const [
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: const [
+            Locale('pt', 'BR'),
+          ],
+          theme: ThemeData(
+            colorScheme: ColorScheme.fromSeed(
+              brightness: settingsController.isDarkModeEnabled
+                  ? Brightness.dark
+                  : Brightness.light,
+              seedColor: Colors.green,
+            ),
+            badgeTheme: const BadgeThemeData(
+              backgroundColor: Colors.green,
+            ),
+            useMaterial3: true,
+            appBarTheme: const AppBarTheme(
+              centerTitle: true,
+            ),
           ),
-          badgeTheme: const BadgeThemeData(
-            backgroundColor: Colors.green,
-          ),
-          useMaterial3: true,
-          appBarTheme: const AppBarTheme(
-            centerTitle: true,
-          ),
+          routerConfig: router.config(),
         ),
-        routerConfig: router.config(),
       ),
     );
   }
