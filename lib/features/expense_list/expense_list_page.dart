@@ -58,12 +58,12 @@ class ExpenseListPage extends StatelessWidget
           onUpdate: (result) async {
             await controller.update(result);
             controller.fetch();
-            budgetListController.fetch();
+            budgetListController.fetchActive();
           },
           onDelete: (expense) async {
             await controller.delete(expense);
             controller.fetch();
-            budgetListController.fetch();
+            budgetListController.fetchActive();
           },
         ),
       ),

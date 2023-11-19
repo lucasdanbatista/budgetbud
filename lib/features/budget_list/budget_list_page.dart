@@ -9,6 +9,7 @@ import '../home/widgets/home_page_child.dart';
 import 'budget_list_controller.dart';
 import 'widgets/budget_bottom_sheet.dart';
 import 'widgets/budget_list_tile.dart';
+import 'widgets/delete_budget_confirmation_dialog.dart';
 
 class BudgetListPage extends StatefulWidget with HomePageChild {
   final BudgetListController controller;
@@ -22,6 +23,23 @@ class BudgetListPage extends StatefulWidget with HomePageChild {
   String get appBarTitle => 'Orçamentos';
 
   @override
+  List<Widget>? get appBarActions => [
+        Builder(
+          builder: (context) => IconButton(
+            onPressed: () async {
+              await context.pushRoute(
+                ArchivedBudgetListRoute(
+                  controller: GetIt.I(),
+                ),
+              );
+              controller.fetchActive();
+            },
+            icon: const Icon(Icons.archive_outlined),
+          ),
+        ),
+      ];
+
+  @override
   State<BudgetListPage> createState() => _BudgetListPageState();
 }
 
@@ -30,7 +48,7 @@ class _BudgetListPageState extends State<BudgetListPage>
   @override
   void initState() {
     super.initState();
-    widget.controller.fetch();
+    widget.controller.fetchActive();
   }
 
   @override
@@ -48,43 +66,53 @@ class _BudgetListPageState extends State<BudgetListPage>
             : ListView.builder(
                 padding: const EdgeInsets.only(bottom: 96),
                 itemCount: widget.controller.budgets.length,
-                itemBuilder: (context, index) => BudgetListTile(
-                  widget.controller.budgets[index],
-                  onEditPressed: () async {
-                    final result = await showModalBottomSheet<Budget>(
-                      isScrollControlled: true,
-                      constraints: BoxConstraints(
-                        maxHeight: MediaQuery.of(context).size.height * 0.7,
-                        minHeight: MediaQuery.of(context).size.height * 0.7,
-                      ),
-                      context: context,
-                      builder: (context) => BudgetBottomSheet(
-                        budget: widget.controller.budgets[index],
-                        onDeletePressed: widget.controller.delete,
-                      ),
-                    );
-                    if (result != null) {
-                      await widget.controller.update(result);
-                    }
-                    widget.controller.fetch();
-                  },
-                  onDeletePressed: () async {
-                    Navigator.pop(context);
-                    await widget.controller
-                        .delete(widget.controller.budgets[index]);
-                    widget.controller.fetch();
-                  },
-                  onTap: () async {
-                    await context.pushRoute(
-                      BudgetDetailsRoute(
-                        controller: GetIt.I(
-                          param1: widget.controller.budgets[index],
+                itemBuilder: (context, index) {
+                  final budget = widget.controller.budgets[index];
+                  return BudgetListTile(
+                    budget,
+                    onArchivePressed: () async {
+                      await widget.controller.archive(budget);
+                      widget.controller.fetchActive();
+                    },
+                    onEditPressed: () async {
+                      final result = await showModalBottomSheet<Budget>(
+                        isScrollControlled: true,
+                        constraints: BoxConstraints(
+                          maxHeight: MediaQuery.of(context).size.height * 0.7,
+                          minHeight: MediaQuery.of(context).size.height * 0.7,
                         ),
-                      ),
-                    );
-                    widget.controller.fetch();
-                  },
-                ),
+                        context: context,
+                        builder: (context) => BudgetBottomSheet(
+                          budget: budget,
+                        ),
+                      );
+                      if (result != null) {
+                        await widget.controller.update(result);
+                      }
+                      widget.controller.fetchActive();
+                    },
+                    onDeletePressed: () async {
+                      showDialog(
+                        context: context,
+                        builder: (context) => DeleteBudgetConfirmationDialog(
+                          onDeletePressed: () async {
+                            Navigator.of(context).pop();
+                            await widget.controller.delete(budget);
+                            widget.controller.fetchActive();
+                          },
+                        ),
+                      );
+                    },
+                    onTap: () async {
+                      await context.pushRoute(
+                        BudgetDetailsRoute(
+                          controller: GetIt.I(param1: budget),
+                        ),
+                      );
+                      widget.controller.fetchActive();
+                    },
+                  );
+                },
               ),
       ),
       floatingActionButton: FloatingActionButton(
@@ -100,7 +128,7 @@ class _BudgetListPageState extends State<BudgetListPage>
           );
           if (budget != null) {
             await widget.controller.create(budget);
-            widget.controller.fetch();
+            widget.controller.fetchActive();
           }
         },
         child: const Icon(Icons.add),

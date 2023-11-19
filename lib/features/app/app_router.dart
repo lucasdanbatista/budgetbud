@@ -9,5 +9,6 @@ class AppRouter extends $AppRouter {
         AutoRoute(page: HomeRoute.page, initial: true),
         AutoRoute(page: BudgetDetailsRoute.page),
         AutoRoute(page: CategoryDetailsRoute.page),
+        AutoRoute(page: ArchivedBudgetListRoute.page),
       ];
 }

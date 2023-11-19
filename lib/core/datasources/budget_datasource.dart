@@ -11,6 +11,10 @@ abstract interface class BudgetDatasource {
 
   Future<void> deleteById(String id);
 
+  Future<void> archiveById(String id);
+
+  Future<void> unarchiveById(String id);
+
   Future<BudgetDTO> findById(String id);
 
   Future<List<BudgetDTO>> findAll();
@@ -36,6 +40,22 @@ class _LocalBudgetDatasource implements BudgetDatasource {
   @override
   Future<void> deleteById(String id) =>
       _database.delete('Budget', where: 'id = ?', whereArgs: [id]);
+
+  @override
+  Future<void> archiveById(String id) => _setArchived(id: id, archived: true);
+
+  @override
+  Future<void> unarchiveById(String id) =>
+      _setArchived(id: id, archived: false);
+
+  Future<void> _setArchived({
+    required String id,
+    required bool archived,
+  }) async {
+    final budget = await findById(id);
+    budget.archived = archived ? 1 : 0;
+    await update(budget);
+  }
 
   @override
   Future<List<BudgetDTO>> findAll() async {

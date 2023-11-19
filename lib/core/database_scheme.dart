@@ -7,6 +7,7 @@ abstract interface class DatabaseScheme {
     _DatabaseSchemeV1(),
     _DatabaseSchemeV2(),
     _DatabaseSchemeV3(),
+    _DatabaseSchemeV4(),
   ];
 
   factory DatabaseScheme(int version) =>
@@ -119,6 +120,19 @@ class _DatabaseSchemeV3 implements DatabaseScheme {
     '''
       alter table Category
         rename column budgetLimit to categoryLimit;
+    ''',
+  ];
+}
+
+class _DatabaseSchemeV4 implements DatabaseScheme {
+  @override
+  final version = 4;
+
+  @override
+  final tables = [
+    '''
+      alter table Budget
+        add archived bool not null default false;
     ''',
   ];
 }

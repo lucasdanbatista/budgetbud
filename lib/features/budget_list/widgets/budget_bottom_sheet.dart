@@ -8,12 +8,10 @@ import '../../../utils/masks/currency_mask.dart';
 
 class BudgetBottomSheet extends StatefulWidget {
   final Budget? budget;
-  final ValueChanged<Budget>? onDeletePressed;
 
   const BudgetBottomSheet({
     super.key,
     this.budget,
-    this.onDeletePressed,
   });
 
   @override
@@ -140,7 +138,22 @@ class _BudgetBottomSheetState extends State<BudgetBottomSheet> {
         ),
       ),
       persistentFooterAlignment: AlignmentDirectional.center,
-      persistentFooterButtons: _persistentFooterButtons,
+      persistentFooterButtons: [
+        TextButton(
+          onPressed: canSave
+              ? () {
+                  final result = widget.budget ?? Budget.lazy();
+                  result.title = titleController.text.trim();
+                  result.limit = limitMask.unmaskText(limitController.text);
+                  result.startAt = startAt!;
+                  result.endAt = endAt!;
+                  result.archived = false;
+                  Navigator.pop(context, result);
+                }
+              : null,
+          child: const Text('SALVAR'),
+        ),
+      ],
     );
   }
 
@@ -151,56 +164,5 @@ class _BudgetBottomSheetState extends State<BudgetBottomSheet> {
           startAt != null &&
           endAt != null;
     });
-  }
-
-  List<Widget> get _persistentFooterButtons {
-    final buttons = <Widget>[
-      TextButton(
-        onPressed: canSave
-            ? () {
-                final result = widget.budget ?? Budget.lazy();
-                result.title = titleController.text.trim();
-                result.limit = limitMask.unmaskText(limitController.text);
-                result.startAt = startAt!;
-                result.endAt = endAt!;
-                Navigator.pop(context, result);
-              }
-            : null,
-        child: const Text('SALVAR'),
-      ),
-    ];
-    if (widget.budget != null) {
-      buttons.insert(
-        0,
-        TextButton(
-          style: TextButton.styleFrom(
-            foregroundColor: Colors.red.shade300,
-          ),
-          onPressed: () => showDialog(
-            context: context,
-            builder: (context) => AlertDialog(
-              title: const Text('Deletar orçamento?'),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context)
-                      ..pop()
-                      ..pop();
-                    widget.onDeletePressed!(widget.budget!);
-                  },
-                  child: const Text('SIM'),
-                ),
-                TextButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: const Text('NÃO'),
-                ),
-              ],
-            ),
-          ),
-          child: const Text('DELETAR'),
-        ),
-      );
-    }
-    return buttons;
   }
 }

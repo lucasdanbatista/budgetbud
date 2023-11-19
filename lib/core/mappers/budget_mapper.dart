@@ -15,6 +15,7 @@ class BudgetMapper
       id: it.id,
       title: it.title,
       limit: it.limit,
+      archived: it.archived == 1,
       startAt: it.startAt,
       endAt: it.endAt,
     );
@@ -28,6 +29,7 @@ class BudgetMapper
       id: it.id,
       title: it.title,
       limit: it.limit,
+      archived: it.archived ? 1 : 0,
       startAt: it.startAt,
       endAt: it.endAt,
     );

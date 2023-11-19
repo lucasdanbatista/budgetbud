@@ -25,12 +25,12 @@ mixin _$BudgetListController on BudgetListControllerBase, Store {
     });
   }
 
-  late final _$fetchAsyncAction =
-      AsyncAction('BudgetListControllerBase.fetch', context: context);
+  late final _$fetchActiveAsyncAction =
+      AsyncAction('BudgetListControllerBase.fetchActive', context: context);
 
   @override
-  Future<void> fetch() {
-    return _$fetchAsyncAction.run(() => super.fetch());
+  Future<void> fetchActive() {
+    return _$fetchActiveAsyncAction.run(() => super.fetchActive());
   }
 
   @override

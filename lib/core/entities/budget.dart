@@ -6,6 +6,7 @@ class Budget extends Entity {
   late final String id;
   late String title;
   late double limit;
+  late bool archived;
   DateTime? _startAt;
   DateTime? _endAt;
   late final List<Category> categories;
@@ -14,12 +15,14 @@ class Budget extends Entity {
     String? id,
     String? title,
     double? limit,
+    bool? archived,
     DateTime? startAt,
     DateTime? endAt,
   }) {
     if (id != null) this.id = id;
     if (title != null) this.title = title;
     if (limit != null) this.limit = limit;
+    if (archived != null) this.archived = archived;
     if (startAt != null) this.startAt = startAt;
     if (endAt != null) this.endAt = endAt;
   }
@@ -28,6 +31,7 @@ class Budget extends Entity {
     required String id,
     required String title,
     required double limit,
+    required bool archived,
     required DateTime startAt,
     required DateTime endAt,
   }) =>
@@ -35,6 +39,7 @@ class Budget extends Entity {
         id: id,
         title: title,
         limit: limit,
+        archived: archived,
         startAt: startAt,
         endAt: endAt,
       );

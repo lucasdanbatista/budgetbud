@@ -8,28 +8,42 @@
 // coverage:ignore-file
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'package:auto_route/auto_route.dart' as _i4;
-import 'package:budgetbud/features/budget_details/budget_details_controller.dart'
-    as _i6;
-import 'package:budgetbud/features/budget_details/budget_details_page.dart'
-    as _i1;
-import 'package:budgetbud/features/category_details/category_details_controller.dart'
+import 'package:auto_route/auto_route.dart' as _i5;
+import 'package:budgetbud/features/archived_budget_list/archived_budget_list_controller.dart'
     as _i7;
-import 'package:budgetbud/features/category_details/category_details_page.dart'
+import 'package:budgetbud/features/archived_budget_list/archived_budget_list_page.dart'
+    as _i1;
+import 'package:budgetbud/features/budget_details/budget_details_controller.dart'
+    as _i8;
+import 'package:budgetbud/features/budget_details/budget_details_page.dart'
     as _i2;
-import 'package:budgetbud/features/home/home_page.dart' as _i3;
-import 'package:flutter/material.dart' as _i5;
+import 'package:budgetbud/features/category_details/category_details_controller.dart'
+    as _i9;
+import 'package:budgetbud/features/category_details/category_details_page.dart'
+    as _i3;
+import 'package:budgetbud/features/home/home_page.dart' as _i4;
+import 'package:flutter/material.dart' as _i6;
 
-abstract class $AppRouter extends _i4.RootStackRouter {
+abstract class $AppRouter extends _i5.RootStackRouter {
   $AppRouter({super.navigatorKey});
 
   @override
-  final Map<String, _i4.PageFactory> pagesMap = {
+  final Map<String, _i5.PageFactory> pagesMap = {
+    ArchivedBudgetListRoute.name: (routeData) {
+      final args = routeData.argsAs<ArchivedBudgetListRouteArgs>();
+      return _i5.AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: _i1.ArchivedBudgetListPage(
+          key: args.key,
+          controller: args.controller,
+        ),
+      );
+    },
     BudgetDetailsRoute.name: (routeData) {
       final args = routeData.argsAs<BudgetDetailsRouteArgs>();
-      return _i4.AutoRoutePage<dynamic>(
+      return _i5.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: _i1.BudgetDetailsPage(
+        child: _i2.BudgetDetailsPage(
           key: args.key,
           controller: args.controller,
         ),
@@ -37,30 +51,69 @@ abstract class $AppRouter extends _i4.RootStackRouter {
     },
     CategoryDetailsRoute.name: (routeData) {
       final args = routeData.argsAs<CategoryDetailsRouteArgs>();
-      return _i4.AutoRoutePage<dynamic>(
+      return _i5.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: _i2.CategoryDetailsPage(
+        child: _i3.CategoryDetailsPage(
           key: args.key,
           controller: args.controller,
         ),
       );
     },
     HomeRoute.name: (routeData) {
-      return _i4.AutoRoutePage<dynamic>(
+      return _i5.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i3.HomePage(),
+        child: const _i4.HomePage(),
       );
     },
   };
 }
 
 /// generated route for
-/// [_i1.BudgetDetailsPage]
-class BudgetDetailsRoute extends _i4.PageRouteInfo<BudgetDetailsRouteArgs> {
+/// [_i1.ArchivedBudgetListPage]
+class ArchivedBudgetListRoute
+    extends _i5.PageRouteInfo<ArchivedBudgetListRouteArgs> {
+  ArchivedBudgetListRoute({
+    _i6.Key? key,
+    required _i7.ArchivedBudgetListController controller,
+    List<_i5.PageRouteInfo>? children,
+  }) : super(
+          ArchivedBudgetListRoute.name,
+          args: ArchivedBudgetListRouteArgs(
+            key: key,
+            controller: controller,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'ArchivedBudgetListRoute';
+
+  static const _i5.PageInfo<ArchivedBudgetListRouteArgs> page =
+      _i5.PageInfo<ArchivedBudgetListRouteArgs>(name);
+}
+
+class ArchivedBudgetListRouteArgs {
+  const ArchivedBudgetListRouteArgs({
+    this.key,
+    required this.controller,
+  });
+
+  final _i6.Key? key;
+
+  final _i7.ArchivedBudgetListController controller;
+
+  @override
+  String toString() {
+    return 'ArchivedBudgetListRouteArgs{key: $key, controller: $controller}';
+  }
+}
+
+/// generated route for
+/// [_i2.BudgetDetailsPage]
+class BudgetDetailsRoute extends _i5.PageRouteInfo<BudgetDetailsRouteArgs> {
   BudgetDetailsRoute({
-    _i5.Key? key,
-    required _i6.BudgetDetailsController controller,
-    List<_i4.PageRouteInfo>? children,
+    _i6.Key? key,
+    required _i8.BudgetDetailsController controller,
+    List<_i5.PageRouteInfo>? children,
   }) : super(
           BudgetDetailsRoute.name,
           args: BudgetDetailsRouteArgs(
@@ -72,8 +125,8 @@ class BudgetDetailsRoute extends _i4.PageRouteInfo<BudgetDetailsRouteArgs> {
 
   static const String name = 'BudgetDetailsRoute';
 
-  static const _i4.PageInfo<BudgetDetailsRouteArgs> page =
-      _i4.PageInfo<BudgetDetailsRouteArgs>(name);
+  static const _i5.PageInfo<BudgetDetailsRouteArgs> page =
+      _i5.PageInfo<BudgetDetailsRouteArgs>(name);
 }
 
 class BudgetDetailsRouteArgs {
@@ -82,9 +135,9 @@ class BudgetDetailsRouteArgs {
     required this.controller,
   });
 
-  final _i5.Key? key;
+  final _i6.Key? key;
 
-  final _i6.BudgetDetailsController controller;
+  final _i8.BudgetDetailsController controller;
 
   @override
   String toString() {
@@ -93,12 +146,12 @@ class BudgetDetailsRouteArgs {
 }
 
 /// generated route for
-/// [_i2.CategoryDetailsPage]
-class CategoryDetailsRoute extends _i4.PageRouteInfo<CategoryDetailsRouteArgs> {
+/// [_i3.CategoryDetailsPage]
+class CategoryDetailsRoute extends _i5.PageRouteInfo<CategoryDetailsRouteArgs> {
   CategoryDetailsRoute({
-    _i5.Key? key,
-    required _i7.CategoryDetailsController controller,
-    List<_i4.PageRouteInfo>? children,
+    _i6.Key? key,
+    required _i9.CategoryDetailsController controller,
+    List<_i5.PageRouteInfo>? children,
   }) : super(
           CategoryDetailsRoute.name,
           args: CategoryDetailsRouteArgs(
@@ -110,8 +163,8 @@ class CategoryDetailsRoute extends _i4.PageRouteInfo<CategoryDetailsRouteArgs> {
 
   static const String name = 'CategoryDetailsRoute';
 
-  static const _i4.PageInfo<CategoryDetailsRouteArgs> page =
-      _i4.PageInfo<CategoryDetailsRouteArgs>(name);
+  static const _i5.PageInfo<CategoryDetailsRouteArgs> page =
+      _i5.PageInfo<CategoryDetailsRouteArgs>(name);
 }
 
 class CategoryDetailsRouteArgs {
@@ -120,9 +173,9 @@ class CategoryDetailsRouteArgs {
     required this.controller,
   });
 
-  final _i5.Key? key;
+  final _i6.Key? key;
 
-  final _i7.CategoryDetailsController controller;
+  final _i9.CategoryDetailsController controller;
 
   @override
   String toString() {
@@ -131,9 +184,9 @@ class CategoryDetailsRouteArgs {
 }
 
 /// generated route for
-/// [_i3.HomePage]
-class HomeRoute extends _i4.PageRouteInfo<void> {
-  const HomeRoute({List<_i4.PageRouteInfo>? children})
+/// [_i4.HomePage]
+class HomeRoute extends _i5.PageRouteInfo<void> {
+  const HomeRoute({List<_i5.PageRouteInfo>? children})
       : super(
           HomeRoute.name,
           initialChildren: children,
@@ -141,5 +194,5 @@ class HomeRoute extends _i4.PageRouteInfo<void> {
 
   static const String name = 'HomeRoute';
 
-  static const _i4.PageInfo<void> page = _i4.PageInfo<void>(name);
+  static const _i5.PageInfo<void> page = _i5.PageInfo<void>(name);
 }

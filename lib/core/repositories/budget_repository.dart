@@ -23,7 +23,17 @@ class BudgetRepository {
     return budget;
   }
 
-  Future<List<Budget>> findAll() async {
+  Future<List<Budget>> findAllActive() async {
+    final budgets = await _findAll();
+    return budgets.where((e) => e.archived == false).toList();
+  }
+
+  Future<List<Budget>> findAllArchived() async {
+    final budgets = await _findAll();
+    return budgets.where((e) => e.archived == true).toList();
+  }
+
+  Future<List<Budget>> _findAll() async {
     final data = await _datasource.findAll();
     final budgets = data.map(_mapper.toEntity).toList();
     for (final budget in budgets) {
@@ -42,4 +52,8 @@ class BudgetRepository {
   }
 
   Future<void> delete(Budget budget) => _datasource.deleteById(budget.id);
+
+  Future<void> archive(Budget budget) => _datasource.archiveById(budget.id);
+
+  Future<void> unarchive(Budget budget) => _datasource.unarchiveById(budget.id);
 }
