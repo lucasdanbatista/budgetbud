@@ -36,7 +36,9 @@ class _ExpenseFilterBottomSheetState extends State<ExpenseFilterBottomSheet> {
             value: options.onlyShowPendingExpenses,
             title: const Text('Exibir apenas despesas pendentes'),
             onChanged: (value) => setState(
-              () => options.onlyShowPendingExpenses = value,
+              () => options = options.copyWith(
+                onlyShowPendingExpenses: value,
+              ),
             ),
           ),
         ],
