@@ -29,7 +29,7 @@ abstract class ExpenseListControllerBase with Store {
   @action
   Future<void> fetch() async {
     final result = ObservableList<Expense>();
-    final budgets = await _budgetRepository.findAll();
+    final budgets = await _budgetRepository.findAllActive();
     for (final budget in budgets) {
       for (final category in budget.categories) {
         result.addAll(category.expenses);

@@ -7,6 +7,7 @@ import 'core/core_module.dart';
 import 'core/module.dart';
 import 'features/app/app_module.dart';
 import 'features/app/app_page.dart';
+import 'features/archived_budget_list/archived_budget_list_module.dart';
 import 'features/budget_details/budget_details_module.dart';
 import 'features/budget_list/budget_list_module.dart';
 import 'features/category_details/category_details_module.dart';
@@ -21,6 +22,7 @@ Future<void> main() async {
   await Module.initAll([
     CoreModule(),
     AppModule(),
+    ArchivedBudgetListModule(),
     BudgetListModule(),
     BudgetDetailsModule(),
     CategoryDetailsModule(),

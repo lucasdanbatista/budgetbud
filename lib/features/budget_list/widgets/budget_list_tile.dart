@@ -5,16 +5,20 @@ import '../../../widgets/budget_limit_progress_bar.dart';
 
 class BudgetListTile extends StatelessWidget {
   final Budget budget;
-  final VoidCallback onTap;
-  final VoidCallback onEditPressed;
+  final VoidCallback? onTap;
+  final VoidCallback? onArchivePressed;
+  final VoidCallback? onUnarchivePressed;
+  final VoidCallback? onEditPressed;
   final VoidCallback onDeletePressed;
 
   const BudgetListTile(
     this.budget, {
     super.key,
-    required this.onTap,
-    required this.onEditPressed,
     required this.onDeletePressed,
+    this.onTap,
+    this.onEditPressed,
+    this.onArchivePressed,
+    this.onUnarchivePressed,
   });
 
   @override
@@ -26,9 +30,44 @@ class BudgetListTile extends StatelessWidget {
         limit: budget.limit,
       ),
       contentPadding: const EdgeInsets.only(left: 16, right: 4),
-      trailing: IconButton(
+      trailing: PopupMenuButton(
         icon: const Icon(Icons.more_vert),
-        onPressed: onEditPressed,
+        itemBuilder: (context) {
+          final items = [
+            PopupMenuItem(
+              onTap: onDeletePressed,
+              child: const Text('Deletar'),
+            ),
+          ];
+          if (onEditPressed != null) {
+            items.insert(
+              0,
+              PopupMenuItem(
+                onTap: onEditPressed,
+                child: const Text('Editar'),
+              ),
+            );
+          }
+          if (onArchivePressed != null) {
+            items.insert(
+              0,
+              PopupMenuItem(
+                onTap: onArchivePressed,
+                child: const Text('Arquivar'),
+              ),
+            );
+          }
+          if (onUnarchivePressed != null) {
+            items.insert(
+              0,
+              PopupMenuItem(
+                onTap: onUnarchivePressed,
+                child: const Text('Desarquivar'),
+              ),
+            );
+          }
+          return items;
+        },
       ),
       onTap: onTap,
     );

@@ -17,12 +17,14 @@ abstract class BudgetListControllerBase with Store {
   ObservableList<Budget> budgets = ObservableList();
 
   @action
-  Future<void> fetch() async =>
-      budgets = ObservableList.of(await _repository.findAll());
+  Future<void> fetchActive() async =>
+      budgets = ObservableList.of(await _repository.findAllActive());
 
   Future<void> update(Budget budget) => _repository.update(budget);
 
   Future<void> delete(Budget budget) => _repository.delete(budget);
+
+  Future<void> archive(Budget budget) => _repository.archive(budget);
 
   Future<void> create(Budget budget) => _repository.create(budget);
 }

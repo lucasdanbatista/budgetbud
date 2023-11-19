@@ -13,6 +13,8 @@ class BudgetDTO extends DTO {
   @JsonKey(name: 'budgetLimit')
   final double limit;
 
+  int archived;
+
   final DateTime startAt;
 
   final DateTime endAt;
@@ -21,6 +23,7 @@ class BudgetDTO extends DTO {
     required this.id,
     required this.title,
     required this.limit,
+    required this.archived,
     required this.startAt,
     required this.endAt,
   });
