@@ -1,6 +1,7 @@
 import 'package:mobx/mobx.dart';
 
 import '../../core/entities/expense.dart';
+import '../../core/entities/expense_filter_options.dart';
 import '../../core/repositories/budget_repository.dart';
 import '../../core/repositories/expense_repository.dart';
 
@@ -21,6 +22,10 @@ abstract class ExpenseListControllerBase with Store {
   @observable
   ObservableList<Expense> expenses = ObservableList();
 
+  ExpenseFilterOptions filterOptions = ExpenseFilterOptions(
+    onlyShowPendingExpenses: false,
+  );
+
   @action
   Future<void> fetch() async {
     final result = ObservableList<Expense>();
@@ -32,6 +37,16 @@ abstract class ExpenseListControllerBase with Store {
     }
     result.sort((a, b) => b.madeAt.compareTo(a.madeAt));
     expenses = result;
+  }
+
+  @action
+  Future<void> filter(ExpenseFilterOptions options) async {
+    filterOptions = options;
+    if (filterOptions.onlyShowPendingExpenses) {
+      expenses = ObservableList.of(expenses.where((e) => e.isPending));
+    } else {
+      fetch();
+    }
   }
 
   Future<void> update(Expense expense) => _expenseRepository.update(expense);

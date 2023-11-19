@@ -2,15 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:line_icons/line_icons.dart';
 
+import '../home/widgets/home_page_child.dart';
 import 'settings_controller.dart';
 
-class SettingsPage extends StatelessWidget {
+class SettingsPage extends StatelessWidget with HomePageChild {
   final SettingsController controller;
 
   const SettingsPage({
     super.key,
     required this.controller,
   });
+
+  @override
+  String get appBarTitle => 'Ajustes';
 
   @override
   Widget build(BuildContext context) {
