@@ -33,6 +33,14 @@ mixin _$ExpenseListController on ExpenseListControllerBase, Store {
     return _$fetchAsyncAction.run(() => super.fetch());
   }
 
+  late final _$filterAsyncAction =
+      AsyncAction('ExpenseListControllerBase.filter', context: context);
+
+  @override
+  Future<void> filter(ExpenseFilterOptions options) {
+    return _$filterAsyncAction.run(() => super.filter(options));
+  }
+
   @override
   String toString() {
     return '''

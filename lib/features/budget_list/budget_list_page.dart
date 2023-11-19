@@ -5,17 +5,21 @@ import 'package:get_it/get_it.dart';
 
 import '../../core/entities/budget.dart';
 import '../app/app_router.gr.dart';
+import '../home/widgets/home_page_child.dart';
 import 'budget_list_controller.dart';
 import 'widgets/budget_bottom_sheet.dart';
 import 'widgets/budget_list_tile.dart';
 
-class BudgetListPage extends StatefulWidget {
+class BudgetListPage extends StatefulWidget with HomePageChild {
   final BudgetListController controller;
 
   const BudgetListPage({
     super.key,
     required this.controller,
   });
+
+  @override
+  String get appBarTitle => 'Orçamentos';
 
   @override
   State<BudgetListPage> createState() => _BudgetListPageState();

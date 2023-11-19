@@ -7,6 +7,7 @@ import '../../utils/extensions/int.dart';
 import '../budget_list/budget_list_page.dart';
 import '../expense_list/expense_list_page.dart';
 import '../settings/settings_page.dart';
+import 'widgets/home_page_child.dart';
 
 @RoutePage()
 class HomePage extends StatefulWidget {
@@ -19,28 +20,32 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   var currentPageIndex = 0;
   late final pageController = PageController(initialPage: currentPageIndex);
+  final pages = <HomePageChild>[
+    BudgetListPage(
+      controller: GetIt.I(),
+    ),
+    ExpenseListPage(
+      budgetListController: GetIt.I(),
+      controller: GetIt.I(),
+    ),
+    SettingsPage(
+      controller: GetIt.I(),
+    ),
+  ];
+
+  HomePageChild get currentPage => pages[currentPageIndex];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('BudgetBud'),
+        title: Text(currentPage.appBarTitle),
+        actions: currentPage.appBarActions,
       ),
       body: PageView(
         controller: pageController,
         onPageChanged: (index) => setState(() => currentPageIndex = index),
-        children: [
-          BudgetListPage(
-            controller: GetIt.I(),
-          ),
-          ExpenseListPage(
-            budgetListController: GetIt.I(),
-            controller: GetIt.I(),
-          ),
-          SettingsPage(
-            controller: GetIt.I(),
-          ),
-        ],
+        children: pages,
       ),
       bottomNavigationBar: BottomNavigationBar(
         showUnselectedLabels: false,
