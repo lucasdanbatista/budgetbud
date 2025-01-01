@@ -24,50 +24,6 @@ import 'package:budgetbud/features/category_details/category_details_page.dart'
 import 'package:budgetbud/features/home/home_page.dart' as _i4;
 import 'package:flutter/material.dart' as _i6;
 
-abstract class $AppRouter extends _i5.RootStackRouter {
-  $AppRouter({super.navigatorKey});
-
-  @override
-  final Map<String, _i5.PageFactory> pagesMap = {
-    ArchivedBudgetListRoute.name: (routeData) {
-      final args = routeData.argsAs<ArchivedBudgetListRouteArgs>();
-      return _i5.AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: _i1.ArchivedBudgetListPage(
-          key: args.key,
-          controller: args.controller,
-        ),
-      );
-    },
-    BudgetDetailsRoute.name: (routeData) {
-      final args = routeData.argsAs<BudgetDetailsRouteArgs>();
-      return _i5.AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: _i2.BudgetDetailsPage(
-          key: args.key,
-          controller: args.controller,
-        ),
-      );
-    },
-    CategoryDetailsRoute.name: (routeData) {
-      final args = routeData.argsAs<CategoryDetailsRouteArgs>();
-      return _i5.AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: _i3.CategoryDetailsPage(
-          key: args.key,
-          controller: args.controller,
-        ),
-      );
-    },
-    HomeRoute.name: (routeData) {
-      return _i5.AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const _i4.HomePage(),
-      );
-    },
-  };
-}
-
 /// generated route for
 /// [_i1.ArchivedBudgetListPage]
 class ArchivedBudgetListRoute
@@ -87,8 +43,16 @@ class ArchivedBudgetListRoute
 
   static const String name = 'ArchivedBudgetListRoute';
 
-  static const _i5.PageInfo<ArchivedBudgetListRouteArgs> page =
-      _i5.PageInfo<ArchivedBudgetListRouteArgs>(name);
+  static _i5.PageInfo page = _i5.PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<ArchivedBudgetListRouteArgs>();
+      return _i1.ArchivedBudgetListPage(
+        key: args.key,
+        controller: args.controller,
+      );
+    },
+  );
 }
 
 class ArchivedBudgetListRouteArgs {
@@ -125,8 +89,16 @@ class BudgetDetailsRoute extends _i5.PageRouteInfo<BudgetDetailsRouteArgs> {
 
   static const String name = 'BudgetDetailsRoute';
 
-  static const _i5.PageInfo<BudgetDetailsRouteArgs> page =
-      _i5.PageInfo<BudgetDetailsRouteArgs>(name);
+  static _i5.PageInfo page = _i5.PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<BudgetDetailsRouteArgs>();
+      return _i2.BudgetDetailsPage(
+        key: args.key,
+        controller: args.controller,
+      );
+    },
+  );
 }
 
 class BudgetDetailsRouteArgs {
@@ -163,8 +135,16 @@ class CategoryDetailsRoute extends _i5.PageRouteInfo<CategoryDetailsRouteArgs> {
 
   static const String name = 'CategoryDetailsRoute';
 
-  static const _i5.PageInfo<CategoryDetailsRouteArgs> page =
-      _i5.PageInfo<CategoryDetailsRouteArgs>(name);
+  static _i5.PageInfo page = _i5.PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<CategoryDetailsRouteArgs>();
+      return _i3.CategoryDetailsPage(
+        key: args.key,
+        controller: args.controller,
+      );
+    },
+  );
 }
 
 class CategoryDetailsRouteArgs {
@@ -194,5 +174,10 @@ class HomeRoute extends _i5.PageRouteInfo<void> {
 
   static const String name = 'HomeRoute';
 
-  static const _i5.PageInfo<void> page = _i5.PageInfo<void>(name);
+  static _i5.PageInfo page = _i5.PageInfo(
+    name,
+    builder: (data) {
+      return const _i4.HomePage();
+    },
+  );
 }

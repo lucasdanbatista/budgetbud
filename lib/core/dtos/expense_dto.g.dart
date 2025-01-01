@@ -12,7 +12,7 @@ ExpenseDTO _$ExpenseDTOFromJson(Map<String, dynamic> json) => ExpenseDTO(
       title: json['title'] as String,
       value: (json['value'] as num).toDouble(),
       madeAt: DateTime.parse(json['madeAt'] as String),
-      isPending: json['isPending'] as int,
+      isPending: (json['isPending'] as num).toInt(),
     );
 
 Map<String, dynamic> _$ExpenseDTOToJson(ExpenseDTO instance) =>

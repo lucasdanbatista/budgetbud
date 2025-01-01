@@ -10,7 +10,7 @@ BudgetDTO _$BudgetDTOFromJson(Map<String, dynamic> json) => BudgetDTO(
       id: json['id'] as String,
       title: json['title'] as String,
       limit: (json['budgetLimit'] as num).toDouble(),
-      archived: json['archived'] as int,
+      archived: (json['archived'] as num).toInt(),
       startAt: DateTime.parse(json['startAt'] as String),
       endAt: DateTime.parse(json['endAt'] as String),
     );
